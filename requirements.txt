@@ -1,0 +1,6 @@
+pylab-sdk
+matplotlib
+pandas
+numpy
+jupyterlab
+ipykernel

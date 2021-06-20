@@ -1,0 +1,31 @@
+# -*- coding: utf-8 -*-
+"""
+Created on 2016-07-06
+Uwe Ziegenhagen
+based on http://stackoverflow.com/questions/16181121/python-very-simple-multithreading-parallel-url-fetching-without-queue
+"""
+ 
+from multiprocessing.pool import ThreadPool
+from time import time as timer
+import os
+ 
+files = ['test-01.tex','test-02.tex','test-03.tex','test-04.tex','test-05.tex',
+'test-06.tex','test-07.tex','test-08.tex','test-09.tex','test-10.tex']
+ 
+def compile_file(cfile):
+	try:
+		result = os.system('pdflatex -interaction=batchmode ' + cfile)
+		return cfile, None
+	except Exception as e:
+		return cfile, e	
+ 
+start = timer()
+results = ThreadPool(8).imap_unordered(compile_file, files)
+for cfile, error in results:
+	if error is None:
+		print("%r compiled in %ss" % (cfile, timer() - start))
+	else:
+		print("Error compiling %r: %s" % (cfile, error))
+		print("Elapsed Time: %s" % (timer() - start,))
+ 
+print('Gesamtzeit',timer() - start)
