@@ -9,8 +9,9 @@ import pandas as pd
 import numpy as np
 import math
 import cmath
-from pandas.core.indexes.base import Index
 import matplotlib.pyplot as plt
+from numpy.polynomial.polynomial import Polynomial
+from pandas.core.indexes.base import Index
 #import functionen as func
 
 # Einlesen der CSV-Datei:
@@ -56,9 +57,9 @@ def Kupferverlust(data, motor_modell):
     Pcu = data[motor_modell]
     return (Delta_Teta_gesamt*(Pcu.loc["Rwk"]+Pcu.loc["Rwb"]+Pcu.loc["Rbk"])-Pcu.loc["Rbk"]*(EisenVerluste1(Daten, Motor_Name)))/(Pcu.loc["Rwk"]*(Pcu.loc["Rwb"]+Pcu.loc["Rbk"]))
 
-print('Pfe = {} [W]'.format(EisenVerluste1(Daten,Motor_Name)))
+print('Pfe = {:.4f} [W]'.format(EisenVerluste1(Daten,Motor_Name)))
 #print('Pfe = {} [W]'.format(func.EisenVerluste1(Daten,Motor_Name)))
-print('Pcu = {} [W]'.format(Kupferverlust(Daten,Motor_Name)))
+print('Pcu = {:.4f} [W]'.format(Kupferverlust(Daten,Motor_Name)))
 #print('Pcu = {} [W]'.format(func.Kupferverlust(Daten,Motor_Name)))
 
 
@@ -70,10 +71,10 @@ R1kx = (KaltwiderstandX(Daten,Motor_Name)/(Vv)**2)
 R1w = R1kx * (1+0.004*Delta_Teta_gesamt)
 Strangstrom = math.sqrt((Kupferverlust(Daten, Motor_Name))/(3*R1w))
 
-print('R1kxs = {} [Ω]'.format(KaltwiderstandX(Daten,Motor_Name)))
-print("R1kx = ",R1kx,"[Ω]")
-print("R1w = ", R1w,"[Ω]") 
-print("Pulsstrom bzw. Strangstrom = ",Strangstrom,"[A]")
+print('R1kxs = {:.4f} [Ω]'.format(KaltwiderstandX(Daten,Motor_Name)))
+print("R1kx = ", "{:.4f}".format(R1kx),"[Ω]")
+print("R1w = ", "{:.4f}".format(R1w) ,"[Ω]") 
+print("Pulsstrom bzw. Strangstrom = ","{:.4f}".format(Strangstrom),"[A]")
 
 #---------------------Basis-Berechnung des Drehmoments-----------------------------------------
 # M = f(Istrang)
@@ -85,15 +86,48 @@ def M_Grundzahl(data, motor_modell):
     cm= (Mg.loc["Mabs"]*((1.4142*Mg.loc["N1_Innenspule"])/Vv)**2)*Ke
     bm = (Mg.loc["Mlin"]*((1.4142*Mg.loc["N1_Innenspule"])/Vv))*Ke
     am = Mg.loc["Mquad"]*Ke
-    #Create 100 equally spaced points between -10 and 10
-    I_strang = np.linspace(0, 2000, 100)
-    y = cm*I_strang**2 + bm*I_strang + am
-    plt.style.use("dark_background")
+    d = (bm**2)-(4*am*cm)
+
+    #checking condition for discriminant
+    if(d > 0):
+        sol1 = (-bm + math.sqrt(d) / (2*am))
+        sol2 = (-bm - math.sqrt(d) / (2*am))
+        print("Zwei reelle Lösungen sind %.2f und %.2f" %(sol1, sol2))
+    
+    elif(d == 0):
+        sol1 = sol2 = -bm / (2*am)
+        print("Zwei gleiche und reelle Wurzeln sind %.2f and %.2f" %(sol1, sol2))
+
+    elif(d <= 0):
+        sol1 = sol2 = -bm / (2*am)
+        imaginary = math.sqrt(-d) / (2*am)
+        print("Zwei verschiedene komplexe Wurzeln sind: %.2f+%.2f and %.2f-%.2f" 
+                          %(sol1, imaginary, sol2, imaginary))
+
+    x = np.linspace(0, 100, 50)
+    y = cm * x ** 2 +bm * x + am
+    # Plot the x, y pairs
+    fig = plt.figure()
     fig, ax = plt.subplots()
-    ax.set_title("Probe")
-    ax.plot(y, I_strang)
-    ax.hlines(I_strang=0, xmin=min(I_strang), xmax=max(I_strang), colors="r", linestyles="--", lw=1)
+    ax.set_title("M = f(I_Strang)")
+    plt.xlabel("Phasenstrom / [A]")
+    plt.ylabel("Drehmoment / [Nm]")
+    plt.grid(True)
+    ax.plot(x, y)
+
+    # Plot a zero line
+    ax.hlines(y=0, xmin=min(x), xmax=max(x), colors='r', linestyles='--', lw=1)
+
+    # Show the plot
     plt.show()
+
+
+M_Grundzahl(Daten, Motor_Name)
+
+
+
+
+    
 
 
     # d = (bm**2)-(4*am*cm)
