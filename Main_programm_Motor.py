@@ -75,19 +75,33 @@ print("R1kx = ",R1kx,"[Ω]")
 print("R1w = ", R1w,"[Ω]") 
 print("Pulsstrom bzw. Strangstrom = ",Strangstrom,"[A]")
 
-#-----------------------Basis-Berechnung des Drehmoments-----------------------------------------
+#---------------------Basis-Berechnung des Drehmoments-----------------------------------------
 # M = f(Istrang)
 # Das Input-variable ist Ke
+
 Ke = Motor_Laenge/100 #mm
 def M_Grundzahl(data, motor_modell):
     Mg = data[motor_modell]
     cm= (Mg.loc["Mabs"]*((1.4142*Mg.loc["N1_Innenspule"])/Vv)**2)*Ke
     bm = (Mg.loc["Mlin"]*((1.4142*Mg.loc["N1_Innenspule"])/Vv))*Ke
     am = Mg.loc["Mquad"]*Ke
-    d = (bm**2)-(4*am*cm)
-    sol1 = (-bm-cmath.sqrt(d))/(2*am)
-    sol2 = (-bm+cmath.sqrt(d))/(2*am)
-    return sol1, sol2
+    #Create 100 equally spaced points between -10 and 10
+    I_strang = np.linspace(0, 2000, 100)
+    y = cm*I_strang**2 + bm*I_strang + am
+    plt.style.use("dark_background")
+    fig, ax = plt.subplots()
+    ax.set_title("Probe")
+    ax.plot(y, I_strang)
+    ax.hlines(I_strang=0, xmin=min(I_strang), xmax=max(I_strang), colors="r", linestyles="--", lw=1)
+    return plt.show()
+
+
+    # d = (bm**2)-(4*am*cm)
+    # sol1 = (-bm-cmath.sqrt(d))/(2*am)
+    # sol2 = (-bm+cmath.sqrt(d))/(2*am)
+    
+
+    #return sol1, sol2
 
 # if d < 0:
 #     print("The equation has no real solutions")
@@ -104,13 +118,13 @@ def M_Grundzahl(data, motor_modell):
 #     num_roots=2
 #     print("M = %f and %f" % (sol1, sol2))
 
-print("Das Drehmoment ist:{} [Nm]".format(M_Grundzahl(Daten, Motor_Name)))
+# print("Das Drehmoment ist:{} [Nm]".format(M_Grundzahl(Daten, Motor_Name)))
 
-# Create 1000 equally spaced points between -10 and 10
+# #Create 1000 equally spaced points between -10 and 10
 # x = np.linspace(-10, 10, 1000)
 
 # # Calculate the y value for each x value
-# y = a * x ** 2 + b * x + c
+# y = Cm * x ** 2 + Bm * x + Am
 
 # # Plot the x, y pairs
 # fig, ax = plt.subplots()

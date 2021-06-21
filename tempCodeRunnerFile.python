@@ -1,31 +1,38 @@
-# -*- coding: utf-8 -*-
-"""
-Created on 2016-07-06
-Uwe Ziegenhagen
-based on http://stackoverflow.com/questions/16181121/python-very-simple-multithreading-parallel-url-fetching-without-queue
-"""
- 
-from multiprocessing.pool import ThreadPool
-from time import time as timer
-import os
- 
-files = ['test-01.tex','test-02.tex','test-03.tex','test-04.tex','test-05.tex',
-'test-06.tex','test-07.tex','test-08.tex','test-09.tex','test-10.tex']
- 
-def compile_file(cfile):
-	try:
-		result = os.system('pdflatex -interaction=batchmode ' + cfile)
-		return cfile, None
-	except Exception as e:
-		return cfile, e	
- 
-start = timer()
-results = ThreadPool(8).imap_unordered(compile_file, files)
-for cfile, error in results:
-	if error is None:
-		print("%r compiled in %ss" % (cfile, timer() - start))
-	else:
-		print("Error compiling %r: %s" % (cfile, error))
-		print("Elapsed Time: %s" % (timer() - start,))
- 
-print('Gesamtzeit',timer() - start)
+import matplotlib.pyplot as plt
+import numpy as np
+import math
+
+a = int(input("Enter the coefficient a: "))
+b = int(input("Enter the coefficient b: "))
+c = int(input("Enter the coefficient c: "))
+
+d = b ** 2 - 4 * a * c  # this part is called the discriminant
+
+if d < 0:
+    print("The equation has no real solutions")
+elif d == 0:
+    x = (-b + math.sqrt(b ** 2 - 4 * a * c)) / (2 * a)
+    print(f"The equation has one solution: {x} ")
+else:
+    x1 = (-b + math.sqrt(b ** 2 - 4 * a * c)) / (2 * a)
+    x2 = (-b - math.sqrt(b ** 2 - 4 * a * c)) / (2 * a)
+    print(f"The equation has two solutions: {x1} or {x2}")
+    
+plt.style.use("dark_background")
+
+# Create 1000 equally spaced points between -10 and 10
+x = np.linspace(-10, 10, 1000)
+
+# Calculate the y value for each x value
+y = a * x ** 2 + b * x + c
+
+# Plot the x, y pairs
+fig, ax = plt.subplots()
+ax.set_title("Quadratic Equations with Python")
+ax.plot(x, y)
+
+# Plot a zero line
+ax.hlines(y=0, xmin=min(x), xmax=max(x), colors='r', linestyles='--', lw=1)
+
+# Show the plot
+plt.show()
