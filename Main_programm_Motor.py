@@ -11,7 +11,7 @@ import math
 import cmath
 from pandas.core.indexes.base import Index
 import matplotlib.pyplot as plt
-import functionen as func
+#import functionen as func
 
 # Einlesen der CSV-Datei:
 Daten = pd.read_csv('C:/Users/wmolina/Desktop/GUI/TechnoTable.csv',delimiter=';', index_col='Parameter',decimal=',').fillna('')
@@ -93,7 +93,7 @@ def M_Grundzahl(data, motor_modell):
     ax.set_title("Probe")
     ax.plot(y, I_strang)
     ax.hlines(I_strang=0, xmin=min(I_strang), xmax=max(I_strang), colors="r", linestyles="--", lw=1)
-    return plt.show()
+    plt.show()
 
 
     # d = (bm**2)-(4*am*cm)
