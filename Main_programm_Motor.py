@@ -78,7 +78,7 @@ print("Pulsstrom bzw. Strangstrom = ","{:.4f}".format(Strangstrom),"[A]")
 
 #---------------------Basis-Berechnung des Drehmoments-----------------------------------------
 # M = f(Istrang)
-# Das Input-variable ist Ke
+# Die Input-variable ist Ke
 
 Ke = Motor_Laenge/100 #mm
 def M_Grundzahl(data, motor_modell):
@@ -107,7 +107,7 @@ def M_Grundzahl(data, motor_modell):
     x = np.linspace(0, 100, 50)
     y = cm * x ** 2 +bm * x + am
     # Plot the x, y pairs
-    fig = plt.figure()
+    # fig = plt.figure()
     fig, ax = plt.subplots()
     ax.set_title("M = f(I_Strang)")
     plt.xlabel("Phasenstrom / [A]")
@@ -123,52 +123,3 @@ def M_Grundzahl(data, motor_modell):
 
 
 M_Grundzahl(Daten, Motor_Name)
-
-
-
-
-    
-
-
-    # d = (bm**2)-(4*am*cm)
-    # sol1 = (-bm-cmath.sqrt(d))/(2*am)
-    # sol2 = (-bm+cmath.sqrt(d))/(2*am)
-    
-
-    #return sol1, sol2
-
-# if d < 0:
-#     print("The equation has no real solutions")
-# elif d == 0:
-#     x = (-b + math.sqrt(b ** 2 - 4 * a * c)) / (2 * a)
-#     print(f"The equation has one solution: {x} ")
-# else:
-#     x1 = (-b + math.sqrt(b ** 2 - 4 * a * c)) / (2 * a)
-#     x2 = (-b - math.sqrt(b ** 2 - 4 * a * c)) / (2 * a)
-#     print(f"The equation has two solutions: {x1} or {x2}")
-
-
-# if M_Grundzahl > 0:
-#     num_roots=2
-#     print("M = %f and %f" % (sol1, sol2))
-
-# print("Das Drehmoment ist:{} [Nm]".format(M_Grundzahl(Daten, Motor_Name)))
-
-# #Create 1000 equally spaced points between -10 and 10
-# x = np.linspace(-10, 10, 1000)
-
-# # Calculate the y value for each x value
-# y = Cm * x ** 2 + Bm * x + Am
-
-# # Plot the x, y pairs
-# fig, ax = plt.subplots()
-# ax.set_title("Quadratic Equations with Python")
-# ax.plot(x, y)
-
-# # Plot a zero line
-# ax.hlines(y=0, xmin=min(x), xmax=max(x), colors='r', linestyles='--', lw=1)
-
-# # Show the plot
-# plt.show()
-
-# %%
