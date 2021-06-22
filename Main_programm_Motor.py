@@ -8,10 +8,11 @@ Created on Wed Jun  2 22:13:08 2021
 import pandas as pd
 import numpy as np
 import math
-import cmath
+# import cmath
 import matplotlib.pyplot as plt
 from numpy.polynomial.polynomial import Polynomial
 from pandas.core.indexes.base import Index
+
 #import functionen as func
 
 # Einlesen der CSV-Datei:
