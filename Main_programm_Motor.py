@@ -15,7 +15,7 @@ from pandas.core.indexes.base import Index
 
 #import functionen as func
 
-# Einlesen der CSV-Datei:
+# Einlesen der CSV-Datei: Hier gehen Sie bitte zuerst dorthin, wo Sie die csv-Datei haben. Klicken Sie auf die Shift-Taste und die rechte Maustaste. Und im Menü suchen Sie nach: Als Pfad kopieren. Zum Schluss kopieren Sie den pfad hier in die Variable Daten
 Daten = pd.read_csv('C:/Users/wmolina/Desktop/GUI/TechnoTable.csv',delimiter=';', index_col='Parameter',decimal=',').fillna('')
 print(Daten)
 
@@ -52,7 +52,10 @@ def EisenVerluste1(data,motor_modell):
     
 Delta_Teta_gesamt =  Temp_Wicklung - Temp_Kühlung
 print("Delta Teta gesamt ist:",Delta_Teta_gesamt, "[K]")
+
+#Hier muss die Plausibilität der Eingangsgröße optimiert werden.
 Vv = int(input("Geben Sie die Verschaltungsvariante ein:"))
+
 Motor_Laenge = float(input("Geben Sie die Länge X in mm ein:"))
 
 def Kupferverlust(data, motor_modell):
@@ -85,31 +88,15 @@ print("Pulsstrom bzw. Strangstrom = ","{:.4f}".format(Strangstrom),"[A]")
 Ke = Motor_Laenge/100 #mm
 def M_Grundzahl(data, motor_modell):
     Mg = data[motor_modell]
-    cm= (Mg.loc["Mabs"]*((1.4142*Mg.loc["N1_Innenspule"])/Vv)**2)*Ke
+    am= (Mg.loc["Mquad"]*((1.4142*Mg.loc["N1_Innenspule"])/Vv)**2)*Ke
     bm = (Mg.loc["Mlin"]*((1.4142*Mg.loc["N1_Innenspule"])/Vv))*Ke
-    am = Mg.loc["Mquad"]*Ke
-    d = (bm**2)-(4*am*cm)
+    cm = Mg.loc["Mabs"]*Ke
+    M_g = am*(Strangstrom**2) + bm*(Strangstrom) + cm
+    print("Drehmoment im Grundzahlbereich: {:.4f} [Nm]".format(M_g))
 
-    #checking condition for discriminant
-    if(d > 0):
-        sol1 = (-bm + math.sqrt(d) / (2*am))
-        sol2 = (-bm - math.sqrt(d) / (2*am))
-        print("Zwei reelle Lösungen sind %.2f und %.2f" %(sol1, sol2))
-    
-    elif(d == 0):
-        sol1 = sol2 = -bm / (2*am)
-        print("Zwei gleiche und reelle Wurzeln sind %.2f and %.2f" %(sol1, sol2))
-
-    elif(d <= 0):
-        sol1 = sol2 = -bm / (2*am)
-        imaginary = math.sqrt(-d) / (2*am)
-        print("Zwei verschiedene komplexe Wurzeln sind: %.2f+%.2f and %.2f-%.2f" 
-                          %(sol1, imaginary, sol2, imaginary))
-
-    x = np.linspace(0, 100, 50)
-    y = cm * x ** 2 +bm * x + am
-    # Plot the x, y pairs
-    # fig = plt.figure()
+    xmax = Strangstrom # Es wurde bereits so modifiziert, dass der Graph dieses Drehmoments als Maximalwert den Strangstrom jedes Motors hat.
+    x = np.arange(0, xmax, 0.5)
+    y = am * x ** 2 +bm * x + cm
     fig, ax = plt.subplots()
     ax.set_title("M = f(I_Strang)")
     plt.xlabel("Phasenstrom / [A]")
@@ -122,6 +109,11 @@ def M_Grundzahl(data, motor_modell):
 
     # Show the plot
     plt.show()
-
-
 M_Grundzahl(Daten, Motor_Name)
+
+    
+
+    
+
+
+
