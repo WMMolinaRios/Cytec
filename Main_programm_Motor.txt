@@ -8,11 +8,10 @@ Created on Wed Jun  2 22:13:08 2021
 import pandas as pd
 import numpy as np
 import math
-# import cmath
+import cmath
 import matplotlib.pyplot as plt
 from numpy.polynomial.polynomial import Polynomial
 from pandas.core.indexes.base import Index
-
 #import functionen as func
 
 # Einlesen der CSV-Datei:
@@ -35,12 +34,11 @@ while start:
         Auswahl = input("Bitte wählen Sie den Motor(XXXHX/UHX): ")
         Motor_Name = Auswahl.upper()
 
-# Eingangsvariablen:
-Frequenz1 = float(input("Geben Sie die Frequenz in Hz: ")) 
+#------------------Basis-Berechnung mit Aussetzbetreib S3 & S6--------------------------------
+
+Frequenz1 = float(input("Geben Sie die Frequenz in Hz: "))
 Temp_Wicklung = int(input("Geben Sie die Wicklungstemperatur in °C ein:"))
 Temp_Kühlung = int(input("Geben Sie die Kühlungstemperatur in °C ein:"))
-
-#------------------Basis-Berechnung mit Aussetzbetreib S3 & S6--------------------------------
 
 def EisenVerluste(data,motor_modell):
     Pvfe = data[motor_modell]
