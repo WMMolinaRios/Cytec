@@ -82,9 +82,12 @@ myLabel3.grid(row=3, column=0, sticky="w", padx=10, pady=10)
 myLabel5 = Label(left_label, text="Drehmoment [N/m]", fg="white", font=(15), relief="flat", bg = "DodgerBlue3")
 myLabel5.grid(row=4, column=0, sticky="w", padx=10, pady=10)
 
-
-MT = Entry(left_label, width=10, font=(10))
-MT.grid(row=1, column=1, padx=5, pady=5)
+clicked = StringVar()
+clicked.set("click here")
+drop = OptionMenu(left_label,clicked, "200HX", "200UHX", "240HX", "310HX", "360UHX", "410HX", "564HX" )
+drop.grid(row=1, column=1)
+# MT = Entry(left_label, width=10, font=(10))
+# MT.grid(row=1, column=1, padx=5, pady=5)
 
 n1 = Entry(left_label, width=10, font=(10))
 n1.grid(row=2, column=1, padx=5, pady=5)

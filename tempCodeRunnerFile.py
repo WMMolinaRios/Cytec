@@ -1,1 +1,1 @@
-fig = plt.figure()
+motor_modell

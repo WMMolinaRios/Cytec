@@ -21,8 +21,7 @@ import sympy
 from tkinter import scrolledtext
 from PIL import ImageTk, Image
 
-
-#-----------------------Move to runtime directory------------------------------------------------------------------
+#Move to runtime directory------------------------------------------------------------------
 
 from os.path import abspath, dirname
 import os

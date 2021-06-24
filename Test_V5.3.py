@@ -57,19 +57,30 @@ edit_menu.add_separator()
 edit_menu.add_command(label="Redo", command=root.quit)
 
 
-#-----------------------Panel 1------------------------------------------------------------------
+#----------Panel 1------------------------------------------------------------------
+panel_1 = PanedWindow(bd=4, relief="raised", bg="black")
+panel_1.pack(fill=BOTH, expand=1)
+    
+left_label = LabelFrame(panel_1, text="Variablen", font=(100), fg="white" , bg="DodgerBlue3")
+panel_1.add(left_label)
+    
+C = Canvas(left_label, bg="Steelblue1", height=250, width=300)
+filename = PhotoImage(file = r"C:\Users\wmolina\Desktop\GUI\CYTEC_pic-min.png")
+background_label = Label(left_label, image=filename)
+background_label.place(relwidth=1, relheight=1)
+    
 def Start():
-    panel_1 = PanedWindow(bd=4, relief="raised", bg="black")
-    panel_1.pack(fill=BOTH, expand=1)
+    # panel_1 = PanedWindow(bd=4, relief="raised", bg="black")
+    # panel_1.pack(fill=BOTH, expand=1)
     
-    left_label = LabelFrame(panel_1, text="Variablen", font=(100), fg="white" , bg="DodgerBlue3")
-    panel_1.add(left_label)
+    # left_label = LabelFrame(panel_1, text="Variablen", font=(100), fg="white" , bg="DodgerBlue3")
+    # panel_1.add(left_label)
     
     
-    C = Canvas(left_label, bg="Dodgerblue3", height=250, width=300)
-    filename = PhotoImage(file = r"C:\Users\wmolina\Desktop\GUI\CYTEC_pic-min.png")
-    background_label = Label(left_label, image=filename)
-    background_label.place(relwidth=1, relheight=1)
+    # C = Canvas(left_label, bg="Steelblue1", height=250, width=300)
+    # filename = PhotoImage(file = r"C:\Users\wmolina\Desktop\GUI\CYTEC_pic-min.png")
+    # background_label = Label(left_label, image=filename)
+    # background_label.place(relwidth=1, relheight=1)
     
     
     
@@ -120,8 +131,8 @@ def Start():
     
     
     
-    #-----------------------Panel 2------------------------------------------------------------------
-    panel_2 = PanedWindow(panel_1, orient=VERTICAL, bd=4, relief="raised", bg="black")
+    #-----------Panel 2------------------------------------------------------------------
+    panel_2 = PanedWindow(panel_1, orient=VERTICAL, bd=4, relief="raised", bg="snow")
     panel_1.add(panel_2)
     
     right_label = Label(panel_2)
