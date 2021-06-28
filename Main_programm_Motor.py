@@ -36,9 +36,31 @@ while start:
         Motor_Name = Auswahl.upper()
 
 # Eingangsvariablen:
-Frequenz1 = float(input("Geben Sie die Frequenz in Hz: ")) 
-Temp_Wicklung = int(input("Geben Sie die Wicklungstemperatur in °C ein:"))
-Temp_Kühlung = int(input("Geben Sie die Kühlungstemperatur in °C ein:"))
+
+Frequenz1 = ""
+while Frequenz1 is not float:
+    try:
+        Frequenz1 = float(input("Geben Sie die Frequenz in Hz: "))
+        break 
+    except ValueError:
+        print("Sie haben das falsch geschrieben, bitte versuchen es noch mal!")
+        
+Temp_Wicklung = ""
+while Temp_Wicklung is not float:
+    try:
+        Temp_Wicklung = int(input("Geben Sie die Wicklungstemperatur in °C ein:"))
+        break 
+    except ValueError:
+        print("Sie haben das falsch geschrieben, bitte versuchen es noch mal!")
+
+Temp_Kühlung = ""
+while Temp_Kühlung is not float:
+    try:
+        Temp_Kühlung = int(input("Geben Sie die Kühlungstemperatur in °C ein:"))
+        break 
+    except ValueError:
+        print("Sie haben das falsch geschrieben, bitte versuchen es noch mal!")
+
 
 #------------------Basis-Berechnung mit Aussetzbetreib S3 & S6--------------------------------
 
@@ -54,9 +76,22 @@ Delta_Teta_gesamt =  Temp_Wicklung - Temp_Kühlung
 print("Delta Teta gesamt ist:",Delta_Teta_gesamt, "[K]")
 
 #Hier muss die Plausibilität der Eingangsgröße optimiert werden.
-Vv = int(input("Geben Sie die Verschaltungsvariante ein:"))
+Vv = ""
+while Vv is not float:
+    try:
+        Vv = int(input("Geben Sie die Verschaltungsvariante ein:"))
+        break 
+    except ValueError:
+        print("Sie haben das falsch geschrieben, bitte versuchen es noch mal!")
 
-Motor_Laenge = float(input("Geben Sie die Länge X in mm ein:"))
+Motor_Laenge = ""
+while Motor_Laenge is not float:
+    try:
+        Motor_Laenge = float(input("Geben Sie die Länge X in mm ein:"))
+        break 
+    except ValueError:
+        print("Sie haben das falsch geschrieben, bitte versuchen es noch mal!")
+
 
 def Kupferverlust(data, motor_modell):
     Pcu = data[motor_modell]
