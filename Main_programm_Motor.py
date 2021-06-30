@@ -23,7 +23,7 @@ Daten[["200HX", "200UHX", "240HX", "240UHX", "310HX", "310UHX", "360UHX", "410HX
 
 # Motorauswahl
 Auswahl = input("Bitte wählen Sie den Motor(XXXHX/UHX): ")
-Motor_Name = Auswahl.upgit dsfdsdfsdper()
+Motor_Name = Auswahl.upper()
 
 start = True
 while start:
