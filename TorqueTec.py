@@ -75,7 +75,7 @@ panel_1.add(left_label)
 C = Canvas(left_label, bg="Dodgerblue3", height=10, width=300)
 filename = PhotoImage(file = r"C:\Users\wmolina\Desktop\GUI\CYTEC_pic-min.png")
 background_label = Label(left_label, image=filename)
-background_label.place(x=120, y=375)#, relwidth=1, relheight=1
+background_label.place(x=10, y=500)#, relwidth=1, relheight=1
 
 
 myLabel1 = Label(left_label, text="Motormodell", fg="white", font=(15), relief="flat", bg = "DodgerBlue3")

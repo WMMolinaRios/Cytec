@@ -23,7 +23,7 @@ Daten[["200HX", "200UHX", "240HX", "240UHX", "310HX", "310UHX", "360UHX", "410HX
 
 # Motorauswahl
 Auswahl = input("Bitte wählen Sie den Motor(XXXHX/UHX): ")
-Motor_Name = Auswahl.upper()
+Motor_Name = Auswahl.upgit dsfdsdfsdper()
 
 start = True
 while start:
@@ -34,6 +34,7 @@ while start:
         print("Sie haben das falsch geschrieben, bitte versuchen es noch mal!")
         Auswahl = input("Bitte wählen Sie den Motor(XXXHX/UHX): ")
         Motor_Name = Auswahl.upper()
+
 
 # Eingangsvariablen:
 
@@ -61,6 +62,56 @@ while Temp_Kühlung is not float:
     except ValueError:
         print("Sie haben das falsch geschrieben, bitte versuchen es noch mal!")
 
+Vv = ""
+while Vv is not float:
+    try:
+        Vv = int(input("Geben Sie die Verschaltungsvariante ein:"))
+        break 
+    except ValueError:
+        print("Sie haben das falsch geschrieben, bitte versuchen es noch mal!")
+
+                        
+   
+
+# Vv = ""
+# while Vv is not int:
+#     if Motor_Name == "200HX"or"200UHX"or"240HX"or"240UHX":
+#         try:
+#             Vv = int(input("Die Verschaltungsvariante sind 1,2,3 oder 6: "))
+#             if Vv :
+#                 print("Richtige Variante!")
+#             else:
+#                 print("Falsche Variante!")
+            
+                
+#         except ValueError:
+#             print("Sie haben das falsch geschrieben, bitte versuchen es noch mal!")
+
+#     elif Motor_Name == "310HX"or"310UHX":
+#         try:
+#             Vv = int(input("Die Verschaltungsvariante sind 1,2,4 oder 8: "))
+            
+#         except ValueError:
+#             print("Sie haben das falsch geschrieben, bitte versuchen es noch mal!")
+#     elif Motor_Name == "360UHX":
+#         try:
+#             Vv = int(input("Die Verschaltungsvariante sind 1,2,5 oder 10: "))
+#             if Vv == "1"or"2"or"5"or"10":
+#                 pass
+#             else:
+#                 print("Falsche Variante!")
+#         except ValueError:
+#             print("Sie haben das falsch geschrieben, bitte versuchen es noch mal!")
+#     elif Motor_Name == "410HX"or"410UHX"or"564HX"or"564UHX":
+#         try:
+#             Vv = int(input("Die Verschaltungsvariante sind 1,2,3,4,6 oder 12: "))
+#             if Vv == "1"or"2"or"3"or"4"or"6"or"12":
+#                 pass
+#             else:
+#                 print("Falsche Variante!")
+#         except ValueError:
+#             print("Sie haben das falsch geschrieben, bitte versuchen es noch mal!")
+
 
 #------------------Basis-Berechnung mit Aussetzbetreib S3 & S6--------------------------------
 
@@ -74,15 +125,6 @@ def EisenVerluste1(data,motor_modell):
     
 Delta_Teta_gesamt =  Temp_Wicklung - Temp_Kühlung
 print("Delta Teta gesamt ist:",Delta_Teta_gesamt, "[K]")
-
-#Hier muss die Plausibilität der Eingangsgröße optimiert werden.
-Vv = ""
-while Vv is not float:
-    try:
-        Vv = int(input("Geben Sie die Verschaltungsvariante ein:"))
-        break 
-    except ValueError:
-        print("Sie haben das falsch geschrieben, bitte versuchen es noch mal!")
 
 Motor_Laenge = ""
 while Motor_Laenge is not float:
@@ -114,7 +156,7 @@ Strangstrom = math.sqrt((Kupferverlust(Daten, Motor_Name))/(3*R1w))
 print('R1kxs = {:.4f} [Ω]'.format(KaltwiderstandX(Daten,Motor_Name)))
 print("R1kx = ", "{:.4f}".format(R1kx),"[Ω]")
 print("R1w = ", "{:.4f}".format(R1w) ,"[Ω]") 
-print("Pulsstrom bzw. Strangstrom = ","{:.4f}".format(Strangstrom),"[A]")
+print("Strangstrom = ","{:.4f}".format(Strangstrom),"[A]")
 
 #---------------------Basis-Berechnung des Drehmoments-----------------------------------------
 # M = f(Istrang)
