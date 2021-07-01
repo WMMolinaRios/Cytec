@@ -8,7 +8,7 @@ Created on Wed Jun  2 22:13:08 2021
 import pandas as pd
 import numpy as np
 import math
-# import cmath
+#import pyinputplus as pyip
 import matplotlib.pyplot as plt
 from numpy.polynomial.polynomial import Polynomial
 from pandas.core.indexes.base import Index
@@ -34,10 +34,9 @@ while start:
         print("Sie haben das falsch geschrieben, bitte versuchen es noch mal!")
         Auswahl = input("Bitte wählen Sie den Motor(XXXHX/UHX): ")
         Motor_Name = Auswahl.upper()
-
+print (type(Motor_Name))
 
 # Eingangsvariablen:
-
 Frequenz1 = ""
 while Frequenz1 is not float:
     try:
@@ -62,58 +61,20 @@ while Temp_Kühlung is not float:
     except ValueError:
         print("Sie haben das falsch geschrieben, bitte versuchen es noch mal!")
 
-Vv = ""
-while Vv is not float:
-    try:
-        Vv = int(input("Geben Sie die Verschaltungsvariante ein:"))
-        break 
-    except ValueError:
-        print("Sie haben das falsch geschrieben, bitte versuchen es noch mal!")
-
-                        
-   
-
 # Vv = ""
 # while Vv is not int:
-#     if Motor_Name == "200HX"or"200UHX"or"240HX"or"240UHX":
-#         try:
-#             Vv = int(input("Die Verschaltungsvariante sind 1,2,3 oder 6: "))
-#             if Vv :
-#                 print("Richtige Variante!")
-#             else:
-#                 print("Falsche Variante!")
-            
-                
-#         except ValueError:
-#             print("Sie haben das falsch geschrieben, bitte versuchen es noch mal!")
+#     try:
+#         Vv = int(input("Geben Sie die Verschaltungsvariante ein:"))
+#         break 
+#     except ValueError:
+#         print("Sie haben das falsch geschrieben, bitte versuchen es noch mal!")
 
-#     elif Motor_Name == "310HX"or"310UHX":
-#         try:
-#             Vv = int(input("Die Verschaltungsvariante sind 1,2,4 oder 8: "))
-            
-#         except ValueError:
-#             print("Sie haben das falsch geschrieben, bitte versuchen es noch mal!")
-#     elif Motor_Name == "360UHX":
-#         try:
-#             Vv = int(input("Die Verschaltungsvariante sind 1,2,5 oder 10: "))
-#             if Vv == "1"or"2"or"5"or"10":
-#                 pass
-#             else:
-#                 print("Falsche Variante!")
-#         except ValueError:
-#             print("Sie haben das falsch geschrieben, bitte versuchen es noch mal!")
-#     elif Motor_Name == "410HX"or"410UHX"or"564HX"or"564UHX":
-#         try:
-#             Vv = int(input("Die Verschaltungsvariante sind 1,2,3,4,6 oder 12: "))
-#             if Vv == "1"or"2"or"3"or"4"or"6"or"12":
-#                 pass
-#             else:
-#                 print("Falsche Variante!")
-#         except ValueError:
-#             print("Sie haben das falsch geschrieben, bitte versuchen es noch mal!")
 
 
 #------------------Basis-Berechnung mit Aussetzbetreib S3 & S6--------------------------------
+# def Verschaltung(,data, motor_modell):
+#     Vv = data[motor_modell]
+#     Vv1 = pd.MultiIndex.from_Daten(Daten, )
 
 def EisenVerluste(data,motor_modell):
     Pvfe = data[motor_modell]
@@ -149,7 +110,7 @@ def KaltwiderstandX(data, motor_modell):
     R1kxs = data[motor_modell]
     return ((R1kxs.loc["R_Strang"]*R1kxs.loc["Want"]+(1-R1kxs.loc["Want"])*R1kxs.loc["R_Strang"])*(Motor_Laenge/100))
 
-R1kx = (KaltwiderstandX(Daten,Motor_Name)/(Vv)**2)
+R1kx = (KaltwiderstandX(Daten,Motor_Name)/Verschaltung(Motor_Name)**2)
 R1w = R1kx * (1+0.004*Delta_Teta_gesamt)
 Strangstrom = math.sqrt((Kupferverlust(Daten, Motor_Name))/(3*R1w))
 
@@ -165,8 +126,8 @@ print("Strangstrom = ","{:.4f}".format(Strangstrom),"[A]")
 Ke = Motor_Laenge/100 #mm
 def M_Grundzahl(data, motor_modell):
     Mg = data[motor_modell]
-    am= (Mg.loc["Mquad"]*((1.4142*Mg.loc["N1_Innenspule"])/Vv)**2)*Ke
-    bm = (Mg.loc["Mlin"]*((1.4142*Mg.loc["N1_Innenspule"])/Vv))*Ke
+    am= (Mg.loc["Mquad"]*((1.4142*Mg.loc["N1_Innenspule"])/Verschaltung(Motor_Name))**2)*Ke
+    bm = (Mg.loc["Mlin"]*((1.4142*Mg.loc["N1_Innenspule"])/Verschaltung(Motor_Name)))*Ke
     cm = Mg.loc["Mabs"]*Ke
     M_g = am*(Strangstrom**2) + bm*(Strangstrom) + cm
     print("Drehmoment im Grundzahlbereich: {:.4f} [Nm]".format(M_g))
