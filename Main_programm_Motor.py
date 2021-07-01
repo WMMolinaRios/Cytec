@@ -16,7 +16,7 @@ from pandas.core.indexes.base import Index
 #import functionen as func
 
 # Einlesen der CSV-Datei: Hier gehen Sie bitte zuerst dorthin, wo Sie die csv-Datei haben. Klicken Sie auf die Shift-Taste und die rechte Maustaste. Und im Menü suchen Sie nach: Als Pfad kopieren. Zum Schluss kopieren Sie den pfad hier in die Variable Daten
-Daten = pd.read_csv('C:/Users/wmolina/Desktop/GUI/TechnoTable.csv',delimiter=';', index_col='Parameter',decimal=',').fillna('')
+Daten = pd.read_csv('C:/Users/Petunio/Desktop/Cytec-main/TechnoTable.csv',delimiter=';', index_col='Parameter',decimal=',').fillna('')
 print(Daten)
 
 Daten[["200HX", "200UHX", "240HX", "240UHX", "310HX", "310UHX", "360UHX", "410HX", "410UHX", "564HX"]] = Daten[["200HX", "200UHX", "240HX", "240UHX", "310HX", "310UHX", "360UHX", "410HX", "410UHX", "564HX"]].apply(pd.to_numeric).fillna('')
@@ -34,7 +34,7 @@ while start:
         print("Sie haben das falsch geschrieben, bitte versuchen es noch mal!")
         Auswahl = input("Bitte wählen Sie den Motor(XXXHX/UHX): ")
         Motor_Name = Auswahl.upper()
-print (type(Motor_Name))
+#print (type(Motor_Name))
 
 # Eingangsvariablen:
 Frequenz1 = ""
@@ -61,13 +61,19 @@ while Temp_Kühlung is not float:
     except ValueError:
         print("Sie haben das falsch geschrieben, bitte versuchen es noch mal!")
 
-# Vv = ""
-# while Vv is not int:
-#     try:
-#         Vv = int(input("Geben Sie die Verschaltungsvariante ein:"))
-#         break 
-#     except ValueError:
-#         print("Sie haben das falsch geschrieben, bitte versuchen es noch mal!")
+vv_keys = ["Seriel", "2TM", "3TM", "4TM", "5TM", "6TM", "8TM", "10TM", "12TM"]
+vv_values = Daten[Motor_Name][vv_keys]
+vv_values = vv_values[vv_values!=''].astype(int)
+Vv = ""
+while True:
+    print("Available values:\n", vv_values )
+    Vv = int(input("Geben Sie die Verschaltungsvariante ein:"))
+    
+    if Vv not in vv_values.values:
+        print("fuk your face")
+    else:
+        break
+        print("Sie haben das falsch geschrieben, bitte versuchen es noch mal!")
 
 
 
@@ -110,7 +116,7 @@ def KaltwiderstandX(data, motor_modell):
     R1kxs = data[motor_modell]
     return ((R1kxs.loc["R_Strang"]*R1kxs.loc["Want"]+(1-R1kxs.loc["Want"])*R1kxs.loc["R_Strang"])*(Motor_Laenge/100))
 
-R1kx = (KaltwiderstandX(Daten,Motor_Name)/Verschaltung(Motor_Name)**2)
+R1kx = (KaltwiderstandX(Daten,Motor_Name)/Vv**2)
 R1w = R1kx * (1+0.004*Delta_Teta_gesamt)
 Strangstrom = math.sqrt((Kupferverlust(Daten, Motor_Name))/(3*R1w))
 
@@ -126,8 +132,8 @@ print("Strangstrom = ","{:.4f}".format(Strangstrom),"[A]")
 Ke = Motor_Laenge/100 #mm
 def M_Grundzahl(data, motor_modell):
     Mg = data[motor_modell]
-    am= (Mg.loc["Mquad"]*((1.4142*Mg.loc["N1_Innenspule"])/Verschaltung(Motor_Name))**2)*Ke
-    bm = (Mg.loc["Mlin"]*((1.4142*Mg.loc["N1_Innenspule"])/Verschaltung(Motor_Name)))*Ke
+    am= (Mg.loc["Mquad"]*((1.4142*Mg.loc["N1_Innenspule"])/Vv)**2)*Ke
+    bm = (Mg.loc["Mlin"]*((1.4142*Mg.loc["N1_Innenspule"])/Vv))*Ke
     cm = Mg.loc["Mabs"]*Ke
     M_g = am*(Strangstrom**2) + bm*(Strangstrom) + cm
     print("Drehmoment im Grundzahlbereich: {:.4f} [Nm]".format(M_g))
