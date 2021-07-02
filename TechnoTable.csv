@@ -1,4 +1,4 @@
-﻿Modell Eisenverluste;Parameter;Einheit;200HX;200UHX;240HX;240UHX;310HX;310UHX;360UHX;410HX;410UHX;564HX
+﻿12;Parameter;Einheit;200HX;200UHX;240HX;240UHX;310HX;310UHX;360UHX;410HX;410UHX;564HX
 Ø Stator innen;D1;mm;128;133;153;178;199,5;230;275;300,5;330;457
 Ø Blechpaket innen;D2;mm;136;140;161;186;209,5;240;286;312,5;340;471
 Ø Blechpaket Nutgrund;D3;mm;144,6;148;175,66;195;227,87;250;298;330;349,6;492,56
@@ -129,7 +129,7 @@ Verschaltungsvarianten;;;;;;;;;;;;
 ;Seriel;;1;1;1;;1;;;1;;1
 ;2TM;;2;2;2;;2;;;2;;2
 ;3TM;;3;3;3;;;;;3;;3
-;4TM;;;;;;4;;;3;;4
+;4TM;;;;;;4;;;4;;4
 ;5TM;;;;;;;;;;;
 ;6TM;;6;6;6;;;;;6;;6
 ;8TM;;;;;;8;;;;;
