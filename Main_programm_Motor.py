@@ -66,14 +66,14 @@ vv_values = Daten[Motor_Name][vv_keys]
 vv_values = vv_values[vv_values!=''].astype(int)
 Vv = ""
 while True:
-    print("Available values:\n", vv_values )
-    Vv = int(input("Geben Sie die Verschaltungsvariante ein:"))
+    print("Die für diesen Motor verfügbaren Teilmotoren sind:\n", vv_values )
+    Vv = int(input("Geben Sie den Teilmotor ein:"))
     
     if Vv not in vv_values.values:
-        print("fuk your face")
+        print("Sie haben das falsch geschrieben, bitte versuchen es noch mal!")
     else:
         break
-        print("Sie haben das falsch geschrieben, bitte versuchen es noch mal!")
+        
 
 
 
