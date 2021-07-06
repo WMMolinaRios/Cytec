@@ -60,7 +60,7 @@ while Temp_Kühlung is not float:
         break 
     except ValueError:
         print("Sie haben das falsch geschrieben, bitte versuchen es noch mal!")
-
+#Hier sucht das Programm die verfügbaren Optionen für die Variable Vv in Abhängigkeit vom Motor_Name
 vv_keys = ["Seriel", "2TM", "3TM", "4TM", "5TM", "6TM", "8TM", "10TM", "12TM"]
 vv_values = Daten[Motor_Name][vv_keys]
 vv_values = vv_values[vv_values!=''].astype(int)
@@ -73,14 +73,14 @@ while True:
         print("Sie haben das falsch geschrieben, bitte versuchen es noch mal!")
     else:
         break
-        
 
 
 
 #------------------Basis-Berechnung mit Aussetzbetreib S3 & S6--------------------------------
-# def Verschaltung(,data, motor_modell):
-#     Vv = data[motor_modell]
-#     Vv1 = pd.MultiIndex.from_Daten(Daten, )
+def Drehzahl (data,motor_modell):
+    n = data[motor_modell]
+    return (Frequenz1/(n.loc['STK_Magnet']/2))
+
 
 def EisenVerluste(data,motor_modell):
     Pvfe = data[motor_modell]
@@ -106,6 +106,8 @@ def Kupferverlust(data, motor_modell):
     Pcu = data[motor_modell]
     return (Delta_Teta_gesamt*(Pcu.loc["Rwk"]+Pcu.loc["Rwb"]+Pcu.loc["Rbk"])-Pcu.loc["Rbk"]*(EisenVerluste1(Daten, Motor_Name)))/(Pcu.loc["Rwk"]*(Pcu.loc["Rwb"]+Pcu.loc["Rbk"]))
 
+    
+print('n = {:.4f} [1/s]'.format(Drehzahl(Daten,Motor_Name)))
 print('Pfe = {:.4f} [W]'.format(EisenVerluste1(Daten,Motor_Name)))
 #print('Pfe = {} [W]'.format(func.EisenVerluste1(Daten,Motor_Name)))
 print('Pcu = {:.4f} [W]'.format(Kupferverlust(Daten,Motor_Name)))
