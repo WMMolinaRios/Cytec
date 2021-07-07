@@ -121,7 +121,7 @@ Strangstrom = math.sqrt((Kupferverlust(Daten, Motor_Name))/(3*R1w))
 #---------------Basis-Berechnung des Spannungskonstante---------------------------------------
 def Spannungskonstante(data, motor_modell):
     Ku = data[motor_modell]
-    return ((Ku.loc['Flussscheiteltwert']/1000)*2*0.93*Ku.loc['N1_Innenspule']*(Ku.loc['STK_Magnet']/2))*(Ku.loc['Nutflaeche_Anzahl']/(3*2*Vv))*(Ku.loc['KorrekturFaktor']/1.4142)
+    return ((Ku.loc['Flussscheiteltwert']/1000)*2*0.93*Ku.loc['N1_Innenspule']*(Ku.loc['STK_Magnet']/2))*(Ku.loc['Nutflaeche_Anzahl']/(3*2*Vv))*(Ku.loc['KorrekturFaktor'])
 Up = Spannungskonstante(Daten, Motor_Name)*2*np.pi*Drehzahl(Daten, Motor_Name)
 #---------------Ergebnisse auf dem Screen---------------------------------------
 print('R1kxs = {:.4f} [Ω]'.format(KaltwiderstandX(Daten,Motor_Name)))
