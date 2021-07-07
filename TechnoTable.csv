@@ -136,7 +136,7 @@ Verschaltungsvarianten;;;;;;;;;;;;
 ;10TM;;;;;;;;;;;
 ;12TM;;;;;;;;;12;;12
 Spannungskonstante;;;;;;;;;;;;
-Anpassung Spannungskonstante;KorrekturFaktor;;1;;1;;;;;;;1
+Anpassung Spannungskonstante;KorrekturFaktor;;1,05;1,05;1,05;1,05;1,05;1,05;1,05;1,05;1,05;1,05
 flächenbezogenen Flussscheitelwert;Flussscheiteltwert;mVs;1,2;1,14;1,48;;1,39;;;1,11;;1,84
 ;U-Seriel;;;;;;;;;;;
 ;U-2TM;;;;;;;;;;;
