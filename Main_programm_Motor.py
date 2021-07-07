@@ -74,8 +74,6 @@ while True:
     else:
         break
 
-
-
 #------------------Basis-Berechnung mit Aussetzbetreib S3 & S6--------------------------------
 def Drehzahl (data,motor_modell):
     n = data[motor_modell]
@@ -106,27 +104,32 @@ def Kupferverlust(data, motor_modell):
     Pcu = data[motor_modell]
     return (Delta_Teta_gesamt*(Pcu.loc["Rwk"]+Pcu.loc["Rwb"]+Pcu.loc["Rbk"])-Pcu.loc["Rbk"]*(EisenVerluste1(Daten, Motor_Name)))/(Pcu.loc["Rwk"]*(Pcu.loc["Rwb"]+Pcu.loc["Rbk"]))
 
-    
+def KaltwiderstandX(data, motor_modell):
+    R1kxs = data[motor_modell]
+    return ((R1kxs.loc["R_Strang"]*R1kxs.loc["Want"]+(1-R1kxs.loc["Want"])*R1kxs.loc["R_Strang"])*(Motor_Laenge/100))  
+
 print('n = {:.4f} [1/s]'.format(Drehzahl(Daten,Motor_Name)))
 print('Pfe = {:.4f} [W]'.format(EisenVerluste1(Daten,Motor_Name)))
 #print('Pfe = {} [W]'.format(func.EisenVerluste1(Daten,Motor_Name)))
 print('Pcu = {:.4f} [W]'.format(Kupferverlust(Daten,Motor_Name)))
 #print('Pcu = {} [W]'.format(func.Kupferverlust(Daten,Motor_Name)))
 
-
-def KaltwiderstandX(data, motor_modell):
-    R1kxs = data[motor_modell]
-    return ((R1kxs.loc["R_Strang"]*R1kxs.loc["Want"]+(1-R1kxs.loc["Want"])*R1kxs.loc["R_Strang"])*(Motor_Laenge/100))
-
 R1kx = (KaltwiderstandX(Daten,Motor_Name)/Vv**2)
 R1w = R1kx * (1+0.004*Delta_Teta_gesamt)
 Strangstrom = math.sqrt((Kupferverlust(Daten, Motor_Name))/(3*R1w))
 
+#---------------Basis-Berechnung des Spannungskonstante---------------------------------------
+def Spannungskonstante(data, motor_modell):
+    Ku = data[motor_modell]
+    return ((Ku.loc['Flussscheiteltwert']/1000)*2*0.93*Ku.loc['N1_Innenspule']*(Ku.loc['STK_Magnet']/2))*(Ku.loc['Nutflaeche_Anzahl']/(3*2*Vv))*(Ku.loc['KorrekturFaktor']/1.4142)
+Up = Spannungskonstante(Daten, Motor_Name)*2*np.pi*Drehzahl(Daten, Motor_Name)
+#---------------Ergebnisse auf dem Screen---------------------------------------
 print('R1kxs = {:.4f} [Ω]'.format(KaltwiderstandX(Daten,Motor_Name)))
 print("R1kx = ", "{:.4f}".format(R1kx),"[Ω]")
 print("R1w = ", "{:.4f}".format(R1w) ,"[Ω]") 
 print("Strangstrom = ","{:.4f}".format(Strangstrom),"[A]")
-
+print("Spannungskonstante Ku = ","{:.4f} [V/1000rpm]".format(Spannungskonstante(Daten,Motor_Name)))
+print("Polradspannung Up = ","{:.4f}".format(Up), "[V]")
 #---------------------Basis-Berechnung des Drehmoments-----------------------------------------
 # M = f(Istrang)
 # Die Input-variable ist Ke
