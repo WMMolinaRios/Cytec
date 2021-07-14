@@ -1,4 +1,4 @@
-﻿12;Parameter;Einheit;200HX;200UHX;240HX;240UHX;310HX;310UHX;360UHX;410HX;410UHX;564HX
+﻿;Parameter;Einheit;200HX;200UHX;240HX;240UHX;310HX;310UHX;360UHX;410HX;410UHX;564HX
 Ø Stator innen;D1;mm;128;133;153;178;199,5;230;275;300,5;330;457
 Ø Blechpaket innen;D2;mm;136;140;161;186;209,5;240;286;312,5;340;471
 Ø Blechpaket Nutgrund;D3;mm;144,6;148;175,66;195;227,87;250;298;330;349,6;492,56
@@ -126,14 +126,14 @@ therm. Kapazität Blech ;Cb;Ws/K;3671,2;3427,9;5439,8;;8739,4;;8305,1;12477,9;;1
 therm. Zeitkonstanrte Wicklung;Tw;s;91,8;78,5;110,1;;121,3;;104,3;96,1;;73,8
 therm. Zeitkonstante Blech;Tb;s;59,1;55,2;66,5;;82,5;;64,6;79,7;;80,7
 Verschaltungsvarianten;;;;;;;;;;;;
-;Seriel;;1;1;1;;1;;;1;;1
-;2TM;;2;2;2;;2;;;2;;2
+;Seriel;;1;1;1;;1;;1;1;;1
+;2TM;;2;2;2;;2;;2;2;;2
 ;3TM;;3;3;3;;;;;3;;3
 ;4TM;;;;;;4;;;4;;4
-;5TM;;;;;;;;;;;
+;5TM;;;;;;;;5;;;
 ;6TM;;6;6;6;;;;;6;;6
 ;8TM;;;;;;8;;;;;
-;10TM;;;;;;;;;;;
+;10TM;;;;;;;;10;;;
 ;12TM;;;;;;;;;12;;12
 Spannungskonstante;;;;;;;;;;;;
 Anpassung Spannungskonstante;KorrekturFaktor;;1,05;1,05;1,05;1,05;1,05;1,05;1,05;1,05;1,05;1,05

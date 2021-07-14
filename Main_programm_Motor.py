@@ -77,7 +77,7 @@ while True:
 #------------------Basis-Berechnung mit Aussetzbetreib S3 & S6--------------------------------
 def Drehzahl (data,motor_modell):
     n = data[motor_modell]
-    return (Frequenz1/(n.loc['STK_Magnet']/2))
+    return (Frequenz1/(n.loc['STK_Magnet']/2)*60)
 
 
 def EisenVerluste(data,motor_modell):
@@ -95,6 +95,7 @@ Motor_Laenge = ""
 while Motor_Laenge is not float:
     try:
         Motor_Laenge = float(input("Geben Sie die Länge X in mm ein:"))
+        print("\n")
         break 
     except ValueError:
         print("Sie haben das falsch geschrieben, bitte versuchen es noch mal!")
@@ -108,7 +109,7 @@ def KaltwiderstandX(data, motor_modell):
     R1kxs = data[motor_modell]
     return ((R1kxs.loc["R_Strang"]*R1kxs.loc["Want"]+(1-R1kxs.loc["Want"])*R1kxs.loc["R_Strang"])*(Motor_Laenge/100))  
 
-print('n = {:.4f} [1/s]'.format(Drehzahl(Daten,Motor_Name)))
+print('n = {:.4f} [rpm]'.format(Drehzahl(Daten,Motor_Name)))
 print("\n")
 print('Pfe = {:.4f} [W]'.format(EisenVerluste1(Daten,Motor_Name)))
 print("\n")
@@ -125,8 +126,9 @@ Strangstrom = math.sqrt((Kupferverlust(Daten, Motor_Name))/(3*R1w))
 def Spannungskonstante(data, motor_modell):
     Ku = data[motor_modell]
     return ((Ku.loc['Flussscheiteltwert']/1000)*2*0.93*Ku.loc['N1_Innenspule']*(Ku.loc['STK_Magnet']/2))*(Ku.loc['Nutflaeche_Anzahl']/(3*2*Vv))*((Ku.loc['KorrekturFaktor']/1.4142))
-Up = Spannungskonstante(Daten, Motor_Name)*2*np.pi*Drehzahl(Daten, Motor_Name)
-#K_T = 3*Spannungskonstante(Daten,)
+Up = Spannungskonstante(Daten, Motor_Name)*2*np.pi*(Drehzahl(Daten, Motor_Name)/60)
+#Drehmomentkonstante = 3*Spannungskonstante
+KT = 3*Spannungskonstante(Daten, Motor_Name)
 #---------------Ergebnisse auf dem Screen---------------------------------------
 print('R1kxs = {:.4f} [Ω]'.format(KaltwiderstandX(Daten,Motor_Name)))
 print("\n")
@@ -140,11 +142,13 @@ print("Spannungskonstante Ku = ","{:.4f} [V/1000rpm]".format(Spannungskonstante(
 print("\n")
 print("Polradspannung Up = ","{:.4f}".format(Up), "[V]")
 print("\n")
+print("Drehmomentkonstante KT = ","{:.4f}".format(KT), "[Nm/A]")
+print("\n")
 #---------------------Basis-Berechnung des Drehmoments-----------------------------------------
 # M = f(Istrang)
 # Die Input-variable ist Ke
 
-Ke = Motor_Laenge/100 #mm
+Ke = Motor_Laenge/100 
 def M_Grundzahl(data, motor_modell):
     Mg = data[motor_modell]
     am= (Mg.loc["Mquad"]*((1.4142*Mg.loc["N1_Innenspule"])/Vv)**2)*Ke
