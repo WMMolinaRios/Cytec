@@ -94,6 +94,7 @@ vv_values = vv_values[vv_values!=''].astype(int)
 Vv = ""
 while True:
     print("Die für diesen Motor verfügbaren Teilmotoren sind:\n", vv_values )
+    print("\n")
     Vv = int(input("Geben Sie den Teilmotor ein: "))
     
     if Vv not in vv_values.values:
@@ -132,14 +133,9 @@ def KaltwiderstandX(data, motor_modell):
     R1kxs = data[motor_modell]
     return ((R1kxs.loc["R_Strang"]*R1kxs.loc["Want"]+(1-R1kxs.loc["Want"])*R1kxs.loc["R_Strang"])*(Motor_Laenge/100))  
 
-print("\n")
-print('f = {:.4f} [1/s]'.format(Frequenz1(Daten,Motor_Name)))
-print("\n")
-print('Pfe = {:.4f} [W]'.format(EisenVerluste1(Daten,Motor_Name)))
-print("\n")
-print('Pcu = {:.4f} [W]'.format(Kupferverlust(Daten,Motor_Name)))
-
-
+def thermischer_Gesamtwiderstand(data, motor_modell):
+    Rthx = data[motor_modell]
+    return Rthx.loc["Rth"]*(100/Motor_Laenge)
 
 R1kx = (KaltwiderstandX(Daten,Motor_Name)/Vv**2)
 R1w = R1kx * (1+0.004*Delta_Teta_gesamt)
@@ -150,7 +146,7 @@ def Spannungskonstante(data, motor_modell):
     Ku = data[motor_modell]
     return (((Ku.loc['Flussscheiteltwert'])*2*0.93*Ku.loc['N1_Innenspule']*(Ku.loc['STK_Magnet']/2))*(Ku.loc['Nutflaeche_Anzahl']/(3*2*Vv))*((Ku.loc['KorrekturFaktor']/1.4142))/1000)
 
-Up = (Spannungskonstante(Daten, Motor_Name)*2*np.pi*(Frequenz1(Daten, Motor_Name))/1.4142)
+Up = (Spannungskonstante(Daten, Motor_Name)*2*np.pi*(Frequenz1(Daten, Motor_Name))/1.732)
 
 #---------------Basis-Berechnung des Drehmomentkonstante---------------------------------------
 def Drehmomentkonstante(data, motor_modell):
@@ -161,23 +157,32 @@ def Drehmomentkonstante(data, motor_modell):
 
 n_max = (SpannungU1/(Spannungskonstante(Daten, Motor_Name)*2*np.pi))*60
 print("\n")
-print('nmax = {:.4f} [rpm]'.format(n_max))
-print("\n")
+print('nmax = {:.2f} [rpm]'.format(n_max))
 
 #---------------Ergebnisse auf dem Screen---------------------------------------
-print('R1kxs = {:.4f} [Ω]'.format(KaltwiderstandX(Daten,Motor_Name)))
+
 print("\n")
-print("R1kx = ", "{:.4f}".format(R1kx),"[Ω]")
+print('f = {:.2f} [1/s]'.format(Frequenz1(Daten,Motor_Name)))
 print("\n")
-print("R1w = ", "{:.4f}".format(R1w) ,"[Ω]")
+print('Pfe = {:.2f} [W]'.format(EisenVerluste1(Daten,Motor_Name)))
+print("\n")
+print('Pcu = {:.2f} [W]'.format(Kupferverlust(Daten,Motor_Name)))
+print("\n")
+print('R1kxs = {:.2f} [Ω]'.format(KaltwiderstandX(Daten,Motor_Name)))
+print("\n")
+print("R1kx = ", "{:.2f}".format(R1kx),"[Ω]")
+print("\n")
+print("R1w = ", "{:.2f}".format(R1w) ,"[Ω]")
 print("\n") 
-print("Strangstrom = ","{:.4f}".format(Strangstrom),"[A]")
+print('Rthx = {:.3f} [Ω]'.format(thermischer_Gesamtwiderstand(Daten,Motor_Name)))
 print("\n")
-print("Spannungskonstante Ku = ","{:.4f} [Vs]".format(Spannungskonstante(Daten,Motor_Name)))
+print("Strangstrom = ","{:.2f}".format(Strangstrom),"[A]")
 print("\n")
-print("Polradspannung Up = ","{:.4f}".format(Up), "[V]")
+print("Spannungskonstante Ku = ","{:.2f} [Vs]".format(Spannungskonstante(Daten,Motor_Name)))
 print("\n")
-print("Drehmomentkonstante KT = ","{:.4f} [Nm/A]".format(Drehmomentkonstante(Daten, Motor_Name)))
+print("Polradspannung Up = ","{:.2f}".format(Up), "[V]")
+print("\n")
+print("Drehmomentkonstante KT = ","{:.2f} [Nm/A]".format(Drehmomentkonstante(Daten, Motor_Name)))
 print("\n")
 #---------------------Basis-Berechnung des Drehmoments-----------------------------------------
 def move_spines():
@@ -200,7 +205,7 @@ def M_Grundzahl(data, motor_modell):
     bm = (Mg.loc["Mlin"]*((1.4142*Mg.loc["N1_Innenspule"])/Vv))*Ke
     cm = Mg.loc["Mabs"]*Ke
     M_g = am*(Strangstrom**2) + bm*(Strangstrom) + cm
-    print("Drehmoment als Funktion der Durchflutung: {:.4f} [Nm]".format(M_g))
+    print("Drehmoment als Funktion der Durchflutung: {:.2f} [Nm]".format(M_g))
     print("\n")
 
     xmax = Strangstrom # Es wurde bereits so modifiziert, dass der Graph dieses Drehmoments als Maximalwert den Strangstrom jedes Motors hat.
