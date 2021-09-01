@@ -55,9 +55,9 @@ while True:
             MotorSpannung = int(input("Motorspanunng [V]: "))
             Strom = float(input("Strom [A]: "))
             Frequenz = float(input("Frequenz [1/s]: "))
-            Drehzahl = int(input("Drehzahl [rpm]: "))
+            Drehzahl = float(input("Drehzahl [rpm]: "))
             Leistung = float(input("Leistung [kW]: "))
-            Drehmoment = int(input("Drehmoment [Nm]: "))
+            Drehmoment = float(input("Drehmoment [Nm]: "))
             Statorverluste = float(input("Statorverluste [W]: "))
 
             ATE_Angabe_S1[0].append(FU_Spannung)
@@ -116,9 +116,9 @@ while True:
             MotorSpannung = int(input("Motorspanunng [V]: "))
             Strom = float(input("Strom [A]: "))
             Frequenz = float(input("Frequenz [1/s]: "))
-            Drehzahl = int(input("Drehzahl [rpm]: "))
+            Drehzahl = float(input("Drehzahl [rpm]: "))
             Leistung = float(input("Leistung [kW]: "))
-            Drehmoment = int(input("Drehmoment [Nm]: "))
+            Drehmoment = float(input("Drehmoment [Nm]: "))
             Mag_Strom = float(input("Mag-Strom [A]: "))
             Statorverluste = float(input("Statorverluste [W]: "))
 
