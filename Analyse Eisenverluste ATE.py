@@ -95,7 +95,7 @@ while True:
             print("Gesamte Eisenverlust = ","{:.2f}".format(PFGe),"[W/kg]")
 
             fig = plt.figure(figsize=(8,6))
-            plt.quiver([0,0,0,0,1], [0,Up_Strang,(U_R1+Up_Strang),0,0], [0,0,-U_xd,-U_xd,0], [Up_Strang,U_R1,0,(U_R1+Up_Strang),Strom], angles='xy', scale_units='xy', scale=1, color=['black', 'yellow', 'green', 'blue', 'red'])
+            plt.quiver([0,0,0,0,1], [0,Up_Strang,(U_R1+Up_Strang),0,0], [0,0,-U_xd,-U_xd,0], [Up_Strang,U_R1,0,(U_R1+Up_Strang),Strom], angles='xy', scale_units='xy', scale=1, color=['black', 'purple', 'green', 'blue', 'red'])
             plt.xlim(-200, 10)
             plt.ylim(0, 200)
             plt.title("Zeiger-Diagramm Grunddrehzahlbereich", fontsize=10)
@@ -161,7 +161,7 @@ while True:
 
 
             fig = plt.figure(figsize=(8,6))
-            plt.quiver([0,0,0], [0,Up_Strang,(U_R1+Up_Strang)], [0,0,-U_xd], [Up_Strang,U_R1,0], angles='xy', scale_units='xy', scale=1, color=['red', 'green', 'blue'])
+            plt.quiver([0,0,0,0,1], [0,Up_Strang,(U_R1+Up_Strang),0,0], [0,0,-U_xd,-U_xd,0], [Up_Strang,U_R1,0,(U_R1+Up_Strang),Strom], angles='xy', scale_units='xy', scale=1, color=['black', 'purple', 'green', 'blue', 'red'])
             plt.xlim(-500, 10)
             plt.ylim(0, 400)
             plt.title("Zeiger-Diagramm Grunddrehzahlbereich", fontsize=10)
