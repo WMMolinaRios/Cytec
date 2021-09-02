@@ -12,14 +12,17 @@ from matplotlib import scale
 import numpy as np
 import math as mt
 import matplotlib.pyplot as plt
+import locale
 from colorama import init
 from numpy.polynomial.polynomial import Polynomial
 
+locale.setlocale(locale.LC_ALL, 'de_DE.utf8')
+
 print("\n----------------------Motorgröße1----------------------\n")
 Stapelfaktor = 0.95
-Außen_DM = int(input("Bitte geben Sie den Außen Durchmesser in mm ein: \n"))
-Innen_DM = int(input("Bitte geben Sie den Innen Durchmesser in mm ein: \n"))
-Laenge = int(input("Bitte geben Sie die Länge in mm ein: \n"))
+Außen_DM = float(locale.atof(input("Bitte geben Sie den Außen Durchmesser in mm ein: \n")))
+Innen_DM = float(locale.atof(input("Bitte geben Sie den Innen Durchmesser in mm ein: \n")))
+Laenge = float(locale.atof(input("Bitte geben Sie die Länge in mm ein: \n")))
 
 print("\n----------------------Motorgröße2----------------------\n")
 
@@ -32,8 +35,8 @@ print("Das Gewicht ist: {:.4f} [kg]".format(Gesamt_Gewicht))
 
 print("\n----------------------Motorwerte----------------------\n")
 
-R_Strang = float(input("Geben Sie den Wicklungswiderstand in [Ω] ein: "))
-Ind = float(input("Geben Sie den Ankerinduktivität ohne Drossel in [mH] ein: "))
+R_Strang = float(locale.atof(input("Geben Sie den Wicklungswiderstand in [Ω] ein: ")))
+Ind = float(locale.atof(input("Geben Sie den Ankerinduktivität ohne Drossel in [mH] ein: ")))
 Ind_mit_Vordr = float(input("Geben Sie den Ankerinduktivität mit Drossel in [mH] ein: "))
 R_Strang120 = R_Strang * 1.4
 ke = float(input("Geben Sie den Wert Spannungskonstant ke ein: "))

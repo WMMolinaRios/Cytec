@@ -13,6 +13,9 @@ from colorama import init
 from colored import fg, bg, attr
 from numpy.polynomial.polynomial import Polynomial
 from pandas.core.indexes.base import Index
+import locale
+locale.setlocale(locale.LC_ALL, 'de_DE.utf8')
+
 
 #import functionen as func
 
@@ -42,7 +45,7 @@ print("-------------------------------------Variable Eingaben-------------------
 Drehzahl1 = ""
 while Drehzahl1 is not float:
     try:
-        Drehzahl1 = float(input("Geben Sie die gewünschte Drehzahl in rpm ein: "))
+        Drehzahl1 = float(locale.atof(input("Geben Sie die gewünschte Drehzahl in rpm ein: ")))
         break
     except ValueError:
         print("Sie haben das falsch geschrieben, bitte versuchen es noch mal!")
@@ -73,12 +76,9 @@ print("\n")
 Delta_Teta_gesamt =  Temp_Wicklung - Temp_Kühlung
 print("Delta Teta gesamt ist:",Delta_Teta_gesamt, "[K]\n")
 
-print("\n")
-
 SpannungU1 = ""
 while True:
-    print("Die verfügbaren Spannungswerte sind 400[V], 425[V] oder 200[V]")
-    SpannungU1 = int(input("Bitte wählen Sie einen Wert: "))
+    SpannungU1 = int(input("Bitte wählen Sie einen Spannungswert 400[V], 425[V] oder 200[V]: \n"))
 
     if SpannungU1 == 400 or SpannungU1 == 425 or SpannungU1 ==200:
         print(f"Der gewählte Spannungswert ist: {SpannungU1} [V]")
@@ -108,7 +108,6 @@ def Frequenz1 (data,motor_modell):
     f = data[motor_modell]
     return ((Drehzahl1*(f.loc['STK_Magnet']/2))/60)
 
-
 def EisenVerluste(data,motor_modell):
     Pvfe = data[motor_modell]
     return (Pvfe.loc['VH']*(1/Frequenz1(Daten, Motor_Name))+Pvfe.loc['VW']*(1/Frequenz1(Daten, Motor_Name))**Pvfe.loc['a'])*(Pvfe.loc['Bmax'])
@@ -120,7 +119,7 @@ def EisenVerluste1(data,motor_modell):
 Motor_Laenge = ""
 while Motor_Laenge is not float:
     try:
-        Motor_Laenge = float(input("Geben Sie die Länge X in mm ein: "))       
+        Motor_Laenge = float(locale.atof(input("Geben Sie die Länge X in mm ein: ")))       
         break 
     except ValueError:
         print("Sie haben das falsch geschrieben, bitte versuchen es noch mal!")
@@ -223,7 +222,7 @@ def M_Grundzahl(data, motor_modell):
 
     # Show the plot
     plt.show()
-M_Grundzahl(Daten, Motor_Name)
+
 def Up_Drehzahl(data, motor_modell):
     
     x = np.arange(0, 692.2, 0.5)
@@ -241,6 +240,8 @@ def Up_Drehzahl(data, motor_modell):
 
     # Show the plot
     plt.show()
+
+M_Grundzahl(Daten, Motor_Name)
 Up_Drehzahl(Daten, Motor_Name)
     
 
