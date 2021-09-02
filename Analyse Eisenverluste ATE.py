@@ -37,9 +37,9 @@ print("\n----------------------Motorwerte----------------------\n")
 
 R_Strang = float(locale.atof(input("Geben Sie den Wicklungswiderstand in [Ω] ein: ")))
 Ind = float(locale.atof(input("Geben Sie den Ankerinduktivität ohne Drossel in [mH] ein: ")))
-Ind_mit_Vordr = float(input("Geben Sie den Ankerinduktivität mit Drossel in [mH] ein: "))
+Ind_mit_Vordr = float(locale.atof(input("Geben Sie den Ankerinduktivität mit Drossel in [mH] ein: ")))
 R_Strang120 = R_Strang * 1.4
-ke = float(input("Geben Sie den Wert Spannungskonstant ke ein: "))
+ke = float(locale.atof(input("Geben Sie den Wert Spannungskonstant ke ein: ")))
 ke_Strang = ke / 1.732
 
 Berechnung =""
@@ -56,12 +56,12 @@ while True:
             print("Geben Sie die Werte von S1:", i + 1)
             FU_Spannung = int(input("FU-Spannung [V]: "))
             MotorSpannung = int(input("Motorspanunng [V]: "))
-            Strom = float(input("Strom [A]: "))
-            Frequenz = float(input("Frequenz [1/s]: "))
-            Drehzahl = float(input("Drehzahl [rpm]: "))
-            Leistung = float(input("Leistung [kW]: "))
-            Drehmoment = float(input("Drehmoment [Nm]: "))
-            Statorverluste = float(input("Statorverluste [W]: "))
+            Strom = float(locale.atof(input("Strom [A]: ")))
+            Frequenz = float(locale.atof(input("Frequenz [1/s]: ")))
+            Drehzahl = float(locale.atof(input("Drehzahl [rpm]: ")))
+            Leistung = float(locale.atof(input("Leistung [kW]: ")))
+            Drehmoment = float(locale.atof(input("Drehmoment [Nm]: ")))
+            Statorverluste = float(locale.atof(input("Statorverluste [W]: ")))
 
             ATE_Angabe_S1[0].append(FU_Spannung)
             ATE_Angabe_S1[1].append(MotorSpannung)
@@ -117,13 +117,14 @@ while True:
             print("Geben Sie die Werte von S1:", i + 1)
             FU_Spannung = int(input("FU-Spannung [V]: "))
             MotorSpannung = int(input("Motorspanunng [V]: "))
-            Strom = float(input("Strom [A]: "))
-            Frequenz = float(input("Frequenz [1/s]: "))
-            Drehzahl = float(input("Drehzahl [rpm]: "))
-            Leistung = float(input("Leistung [kW]: "))
-            Drehmoment = float(input("Drehmoment [Nm]: "))
-            Mag_Strom = float(input("Mag-Strom [A]: "))
-            Statorverluste = float(input("Statorverluste [W]: "))
+            Strom = float(locale.atof(input("Strom [A]: ")))
+            Frequenz = float(locale.atof(input("Frequenz [1/s]: ")))
+            Drehzahl = float(locale.atof(input("Drehzahl [rpm]: ")))
+            Leistung = float(locale.atof(input("Leistung [kW]: ")))
+            Drehmoment = float(locale.atof(input("Drehmoment [Nm]: ")))
+            Mag_Strom = float(locale.atof(input("Mag-Strom [A]: ")))
+            Statorverluste = float(locale.atof(input("Statorverluste [W]: ")))
+            
 
             ATE_Angabe_S1[0].append(FU_Spannung)
             ATE_Angabe_S1[1].append(MotorSpannung)
@@ -149,7 +150,7 @@ while True:
             NewValue = input("Wenn Sie einen neuen Wert für L eingeben möchten, drücken Sie 1 sonst 2: ")
             NewValue = int(NewValue)
             if NewValue == 1:
-                NewL = float(input("Neuer Wert von L [mH] = "))  
+                NewL = float(locale.atof(input("Neuer Wert von L [mH] = ")))  
                 U_xd = (2*mt.pi*(Frequenz)*((NewL+Ind)/1000))*Strom 
                 print("U_xd = ", "{:.2f}".format(U_xd),"[V]")  
             else:               
@@ -162,7 +163,7 @@ while True:
             PFGe = (1/Gesamt_Gewicht)*(((2**(-5))*Drehzahl**2)+0.1361*Drehzahl-120)
             print("Gesamte Eisenverlust = ","{:.2f}".format(PFGe),"[W/kg]")
 
-
+            """
             fig = plt.figure(figsize=(8,6))
             plt.quiver([0,0,0,0,1], [0,Up_Strang,(U_R1+Up_Strang),0,0], [0,0,-U_xd,-U_xd,0], [Up_Strang,U_R1,0,(U_R1+Up_Strang),Strom], angles='xy', scale_units='xy', scale=1, color=['black', 'purple', 'green', 'blue', 'red'])
             plt.xlim(-500, 10)
@@ -170,7 +171,7 @@ while True:
             plt.title("Zeiger-Diagramm Grunddrehzahlbereich", fontsize=10)
             plt.grid()
             plt.show()
-
+            """
             break
 
     else:
