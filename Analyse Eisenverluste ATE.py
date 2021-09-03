@@ -94,7 +94,7 @@ while True:
                 print("U_xd = ", "{:.2f}".format(U_xd),"[V]")
             Kontrolle_FU_Sp = mt.sqrt((Up_Strang + U_R1)**2 + (U_xd)**2)*mt.sqrt(3)
             print("K_FU_Sp= ", "{:.2f}".format(Kontrolle_FU_Sp),"[V]")
-            PFGe = (1/Gesamt_Gewicht)*(((2**(-5))*Drehzahl**2)+0.1361*Drehzahl-120)
+            PFGe = (1/Gesamt_Gewicht)*(0.00002*Drehzahl**2)+(0.1361*Drehzahl)-120
             print("Gesamte Eisenverlust = ","{:.2f}".format(PFGe),"[W/kg]")
 
             fig = plt.figure(figsize=(8,6))
@@ -160,7 +160,7 @@ while True:
             print("Der Winkel zu Up = ", "{:.2f}".format(Winkel_Up),"[°]")
             Kontrolle_FU_Sp = mt.sqrt((Up_Strang + U_R1)**2 + (U_xd)**2)*mt.sqrt(3)
             print("K_FU_Sp= ", "{:.2f}".format(Kontrolle_FU_Sp),"[V]")
-            PFGe = (1/Gesamt_Gewicht)*(((2**(-5))*Drehzahl**2)+0.1361*Drehzahl-120)
+            PFGe = (1/Gesamt_Gewicht)*(0.00002*Drehzahl**2)+(0.1361*Drehzahl)-120
             print("Gesamte Eisenverlust = ","{:.2f}".format(PFGe),"[W/kg]")
 
             """

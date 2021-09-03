@@ -42,10 +42,10 @@ while start:
 print("\n")
 print("-------------------------------------Variable Eingaben-------------------------------------\n")
 # Eingangsvariablen:
-Drehzahl1 = ""
-while Drehzahl1 is not float:
+Frequenz = ""
+while Frequenz is not float:
     try:
-        Drehzahl1 = float(locale.atof(input("Geben Sie die gewünschte Drehzahl in rpm ein: ")))
+        Frequenz = float(locale.atof(input("Geben Sie die gewünschte Frequenz in rpm ein: ")))
         break
     except ValueError:
         print("Sie haben das falsch geschrieben, bitte versuchen es noch mal!")
@@ -104,9 +104,10 @@ while True:
 print("\n")
 
 #------------------Basis-Berechnung mit Aussetzbetreib S3 & S6--------------------------------
-def Frequenz1 (data,motor_modell):
+Frequenz1 = Frequenz/60 #Cambio [1/min] a [1/s]
+def Drehzahl (data,motor_modell):
     f = data[motor_modell]
-    return ((Drehzahl1*(f.loc['STK_Magnet']/2))/60)
+    return ((Frequenz1*(f.loc['STK_Magnet']/2))/60)
 
 def EisenVerluste(data,motor_modell):
     Pvfe = data[motor_modell]
@@ -145,7 +146,8 @@ def Spannungskonstante(data, motor_modell):
     Ku = data[motor_modell]
     return (((Ku.loc['Flussscheiteltwert'])*2*0.93*Ku.loc['N1_Innenspule']*(Ku.loc['STK_Magnet']/2))*(Ku.loc['Nutflaeche_Anzahl']/(3*2*Vv))*((Ku.loc['KorrekturFaktor']/1.4142))/1000)
 
-Up = (Spannungskonstante(Daten, Motor_Name)*2*np.pi*(Frequenz1(Daten, Motor_Name))/1.732)
+# muss die Einheit der Frequenz ändert
+Up = (Spannungskonstante(Daten, Motor_Name)*2*np.pi*(Drehzahl(Daten, Motor_Name)))
 
 #---------------Basis-Berechnung des Drehmomentkonstante---------------------------------------
 def Drehmomentkonstante(data, motor_modell):
@@ -154,14 +156,15 @@ def Drehmomentkonstante(data, motor_modell):
 
 #---------------Basis-Berechnung der nmax---------------------------------------
 
-n_max = (SpannungU1/(Spannungskonstante(Daten, Motor_Name)*2*np.pi))*60
+n_max = ((SpannungU1/1.732)/(Spannungskonstante(Daten, Motor_Name)*2*np.pi))*60
 print("\n")
 print('nmax = {:.2f} [rpm]'.format(n_max))
 
 #---------------Ergebnisse auf dem Screen---------------------------------------
-
 print("\n")
-print('f = {:.2f} [1/s]'.format(Frequenz1(Daten,Motor_Name)))
+print
+print("\n")
+print('f der Drehzahl = {:.2f} [1/s]'.format(Frequenz1(Daten,Motor_Name)))
 print("\n")
 print('Pfe = {:.2f} [W]'.format(EisenVerluste1(Daten,Motor_Name)))
 print("\n")
@@ -225,7 +228,7 @@ def M_Grundzahl(data, motor_modell):
 
 def Up_Drehzahl(data, motor_modell):
     
-    x = np.arange(0, 692.2, 0.5)
+    x = np.arange(0, 413, 0.5)
     y = Spannungskonstante(Daten, Motor_Name)*2*np.pi*x
     
     ax = move_spines()
