@@ -10,10 +10,9 @@ import numpy as np
 import math as mt
 import matplotlib.pyplot as plt
 from colorama import init
-from colored import fg, bg, attr
 from numpy.polynomial.polynomial import Polynomial
 from pandas.core.indexes.base import Index
-import locale
+import locale 
 locale.setlocale(locale.LC_ALL, 'de_DE.utf8')
 
 
@@ -42,16 +41,15 @@ while start:
 print("\n")
 print("-------------------------------------Variable Eingaben-------------------------------------\n")
 # Eingangsvariablen:
-Frequenz = ""
-while Frequenz is not float:
+Drehzahl = "" # Hier handelt es sich um die Drehzahl an einem Bemessungspunkt!!
+while Drehzahl is not float:
     try:
-        Frequenz = float(locale.atof(input("Geben Sie die gewünschte Frequenz in rpm ein: ")))
+        Drehzahl = float(locale.atof(input("Geben Sie die gewünschte Frequenz in [1/min] ein: ")))
         break
     except ValueError:
         print("Sie haben das falsch geschrieben, bitte versuchen es noch mal!")
         
 print("\n")   
-
 
 Temp_Wicklung = ""
 while Temp_Wicklung is not float:
@@ -95,7 +93,7 @@ Vv = ""
 while True:
     print("Die für diesen Motor verfügbaren Teilmotoren sind:\n", vv_values )
     print("\n")
-    Vv = int(input("Geben Sie den Teilmotor ein: "))
+    Vv = int(input("Wählen Sie den Teilmotor: "))
     
     if Vv not in vv_values.values:
         print("Sie haben das falsch geschrieben, bitte versuchen es noch mal!")
@@ -104,10 +102,10 @@ while True:
 print("\n")
 
 #------------------Basis-Berechnung mit Aussetzbetreib S3 & S6--------------------------------
-Frequenz1 = Frequenz/60 #Cambio [1/min] a [1/s]
-def Drehzahl (data,motor_modell):
+Drehzahl_1 = Drehzahl/60
+def Frequenz1(data,motor_modell): # Hier muss die Frequenz berechnet werden
     f = data[motor_modell]
-    return ((Frequenz1*(f.loc['STK_Magnet']/2))/60)
+    return ((Drehzahl*(f.loc['STK_Magnet']/2)))/60
 
 def EisenVerluste(data,motor_modell):
     Pvfe = data[motor_modell]
@@ -120,7 +118,7 @@ def EisenVerluste1(data,motor_modell):
 Motor_Laenge = ""
 while Motor_Laenge is not float:
     try:
-        Motor_Laenge = float(locale.atof(input("Geben Sie die Länge X in mm ein: ")))       
+        Motor_Laenge = int(input("Geben Sie die Länge X in mm ein: "))       
         break 
     except ValueError:
         print("Sie haben das falsch geschrieben, bitte versuchen es noch mal!")
@@ -147,7 +145,7 @@ def Spannungskonstante(data, motor_modell):
     return (((Ku.loc['Flussscheiteltwert'])*2*0.93*Ku.loc['N1_Innenspule']*(Ku.loc['STK_Magnet']/2))*(Ku.loc['Nutflaeche_Anzahl']/(3*2*Vv))*((Ku.loc['KorrekturFaktor']/1.4142))/1000)
 
 # muss die Einheit der Frequenz ändert
-Up = (Spannungskonstante(Daten, Motor_Name)*2*np.pi*(Drehzahl(Daten, Motor_Name)))
+Up = (Spannungskonstante(Daten, Motor_Name)*2*np.pi*(Drehzahl_1))
 
 #---------------Basis-Berechnung des Drehmomentkonstante---------------------------------------
 def Drehmomentkonstante(data, motor_modell):
@@ -156,15 +154,15 @@ def Drehmomentkonstante(data, motor_modell):
 
 #---------------Basis-Berechnung der nmax---------------------------------------
 
-n_max = ((SpannungU1/1.732)/(Spannungskonstante(Daten, Motor_Name)*2*np.pi))*60
+n_max = ((SpannungU1)/(Spannungskonstante(Daten, Motor_Name)*2*np.pi))*60
 print("\n")
 print('nmax = {:.2f} [rpm]'.format(n_max))
 
 #---------------Ergebnisse auf dem Screen---------------------------------------
 print("\n")
-print
+print("Drehzahl in [1/s] = {:.3f}".format(Drehzahl_1))
 print("\n")
-print('f der Drehzahl = {:.2f} [1/s]'.format(Frequenz1(Daten,Motor_Name)))
+print("Frequenz f = {:.3f} [1/s]".format(Frequenz1(Daten,Motor_Name)))
 print("\n")
 print('Pfe = {:.2f} [W]'.format(EisenVerluste1(Daten,Motor_Name)))
 print("\n")
@@ -186,7 +184,14 @@ print("Polradspannung Up = ","{:.2f}".format(Up), "[V]")
 print("\n")
 print("Drehmomentkonstante KT = ","{:.2f} [Nm/A]".format(Drehmomentkonstante(Daten, Motor_Name)))
 print("\n")
-#---------------------Basis-Berechnung des Drehmoments-----------------------------------------
+#---------------------Stromgrenze im Grunddrehzahlbereich-----------------------------------------
+
+def Stromgrenze(data, motor_modell):
+    Ld = data[motor_modell]
+    return ((mt.sqrt((SpannungU1**2)-(Up**2)))/(2*np.pi*Ld.loc['Ld'])*1000)
+
+print("Der Stromgrenze im Grunddrehzahlbereich I1g = {:.2f} [A]".format(Stromgrenze(Daten, Motor_Name)))
+
 def move_spines():
     fix, ax = plt.subplots()
     for spine in ["left", "bottom"]:
@@ -196,39 +201,10 @@ def move_spines():
         ax.spines[spine].set_color("none")
     
     return ax
-
-# M = f(Istrang)
-# Die Input-variable ist Ke
-
-Ke = Motor_Laenge/100 
-def M_Grundzahl(data, motor_modell):
-    Mg = data[motor_modell]
-    am= (Mg.loc["Mquad"]*((1.4142*Mg.loc["N1_Innenspule"])/Vv)**2)*Ke
-    bm = (Mg.loc["Mlin"]*((1.4142*Mg.loc["N1_Innenspule"])/Vv))*Ke
-    cm = Mg.loc["Mabs"]*Ke
-    M_g = am*(Strangstrom**2) + bm*(Strangstrom) + cm
-    print("Drehmoment als Funktion der Durchflutung: {:.2f} [Nm]".format(M_g))
-    print("\n")
-
-    xmax = Strangstrom # Es wurde bereits so modifiziert, dass der Graph dieses Drehmoments als Maximalwert den Strangstrom jedes Motors hat.
-    x = np.arange(0, xmax, 0.5)
-    y = am * x ** 2 +bm * x + cm
-    ax = move_spines()
-    ax.set_title("M = f(I_Strang)")
-    plt.xlabel("Phasenstrom / [A]")
-    plt.ylabel("Drehmoment / [Nm]")
-    plt.grid(True)
-    ax.plot(x, y)
-
-    # Plot a zero line
-    ax.hlines(y=0, xmin=min(x), xmax=max(x), colors='r', linestyles='--', lw=1)
-
-    # Show the plot
-    plt.show()
-
 def Up_Drehzahl(data, motor_modell):
     
-    x = np.arange(0, 413, 0.5)
+    xmax = n_max
+    x = np.arange(0, xmax, 2)
     y = Spannungskonstante(Daten, Motor_Name)*2*np.pi*x
     
     ax = move_spines()
@@ -243,9 +219,66 @@ def Up_Drehzahl(data, motor_modell):
 
     # Show the plot
     plt.show()
-
-M_Grundzahl(Daten, Motor_Name)
 Up_Drehzahl(Daten, Motor_Name)
+# def move_spines():
+#     fix, ax = plt.subplots()
+#     for spine in ["left", "bottom"]:
+#         ax.spines[spine].set_position("zero")
+    
+#     for spine in ["right", "top"]:
+#         ax.spines[spine].set_color("none")
+    
+#     return ax
+
+# # M = f(Istrang)
+# # Die Input-variable ist Ke
+
+# Ke = Motor_Laenge/100 
+# def M_Grundzahl(data, motor_modell):
+#     Mg = data[motor_modell]
+#     am= (Mg.loc["Mquad"]*((1.4142*Mg.loc["N1_Innenspule"])/Vv)**2)*Ke
+#     bm = (Mg.loc["Mlin"]*((1.4142*Mg.loc["N1_Innenspule"])/Vv))*Ke
+#     cm = Mg.loc["Mabs"]*Ke
+#     M_g = am*(Strangstrom**2) + bm*(Strangstrom) + cm
+#     print("Drehmoment als Funktion der Durchflutung: {:.2f} [Nm]".format(M_g))
+#     print("\n")
+
+#     xmax = Strangstrom # Es wurde bereits so modifiziert, dass der Graph dieses Drehmoments als Maximalwert den Strangstrom jedes Motors hat.
+#     x = np.arange(0, xmax, 0.5)
+#     y = am * x ** 2 +bm * x + cm
+#     ax = move_spines()
+#     ax.set_title("M = f(I_Strang)")
+#     plt.xlabel("Phasenstrom / [A]")
+#     plt.ylabel("Drehmoment / [Nm]")
+#     plt.grid(True)
+#     ax.plot(x, y)
+
+#     # Plot a zero line
+#     ax.hlines(y=0, xmin=min(x), xmax=max(x), colors='r', linestyles='--', lw=1)
+
+#     # Show the plot
+#     plt.show()
+
+# def Up_Drehzahl(data, motor_modell):
+    
+#     x = np.arange(0, 413, 0.5)
+#     y = Spannungskonstante(Daten, Motor_Name)*2*np.pi*x
+    
+#     ax = move_spines()
+#     ax.set_title("Up = f(n)")
+#     plt.xlabel("Drehzahl [rpm]")
+#     plt.ylabel("ind.Spannung [V]")
+#     plt.grid(True)
+#     ax.plot(x, y)
+
+#     # Plot a zero line
+#     ax.hlines(y=0, xmin=min(x), xmax=max(x), colors='r', linestyles='--', lw=1)
+
+#     # Show the plot
+#     plt.show()
+
+# M_Grundzahl(Daten, Motor_Name)
+# Up_Drehzahl(Daten, Motor_Name)
     
 
     
