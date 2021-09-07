@@ -4,11 +4,12 @@ Created on Wed Jun  2 22:13:08 2021
 
 @author: WMolina
 """
-
 import pandas as pd
 import numpy as np
 import math as mt
 import matplotlib.pyplot as plt
+from matplotlib.figure import Figure
+from matplotlib import style
 from colorama import init
 from numpy.polynomial.polynomial import Polynomial
 from pandas.core.indexes.base import Index
@@ -44,7 +45,7 @@ print("-------------------------------------Variable Eingaben-------------------
 Drehzahl = "" # Hier handelt es sich um die Drehzahl an einem Bemessungspunkt!!
 while Drehzahl is not float:
     try:
-        Drehzahl = float(locale.atof(input("Geben Sie die gewünschte Frequenz in [1/min] ein: ")))
+        Drehzahl = float(locale.atof(input("Geben Sie die gewünschte Drehzahl in [1/min] ein: ")))
         break
     except ValueError:
         print("Sie haben das falsch geschrieben, bitte versuchen es noch mal!")
@@ -192,96 +193,42 @@ def Stromgrenze(data, motor_modell):
 
 print("Der Stromgrenze im Grunddrehzahlbereich I1g = {:.2f} [A]".format(Stromgrenze(Daten, Motor_Name)))
 
-def move_spines():
-    fix, ax = plt.subplots()
-    for spine in ["left", "bottom"]:
-        ax.spines[spine].set_position("zero")
-    
-    for spine in ["right", "top"]:
-        ax.spines[spine].set_color("none")
-    
-    return ax
-def Up_Drehzahl(data, motor_modell):
-    
-    xmax = n_max
+
+
+#---------------------Diagramme-----------------------------------------
+
+def Diagramms(data, motor_modell):
+    Wert = data[motor_modell]
+    xmax = (n_max*(Wert.loc['STK_Magnet']/2))/60
     x = np.arange(0, xmax, 2)
-    y = Spannungskonstante(Daten, Motor_Name)*2*np.pi*x
+    y1 = Spannungskonstante(Daten, Motor_Name)*2*np.pi*x 
+    y2 = (Wert.loc['VH']*(1/x)+Wert.loc['VW']*(1/x)**Wert.loc['a'])*(Wert.loc['Bmax'])
+
+    fig, axis = plt.subplots(2, figsize=(10,10)) 
+    fig.suptitle("Diagramme")
+    axis[0].plot(x,y1)
+    axis[0].set_title("Up = f(n)")
+    #axis[0].set_xlabel("Frequenz [1/s]")
+    axis[0].set_ylabel("ind.Spannung [V]")
+    axis[0].grid()
     
-    ax = move_spines()
-    ax.set_title("Up = f(n)")
-    plt.xlabel("Drehzahl [rpm]")
-    plt.ylabel("ind.Spannung [V]")
-    plt.grid(True)
-    ax.plot(x, y)
-
-    # Plot a zero line
-    ax.hlines(y=0, xmin=min(x), xmax=max(x), colors='r', linestyles='--', lw=1)
-
-    # Show the plot
+    axis[1].plot(x,y2, color="red")
+    axis[1].set_title("Pvfe = f(n)")
+    #axis[1].set_xlabel("Frequenz [1/s]")
+    axis[1].set_ylabel("Eisenverluste [W/kg]")
+    axis[1].grid()
+    
+    for ax in axis.flat:
+        ax.set(xlabel='Frequenz [1/s]')
+    
+    for ax in axis.flat:
+        ax.label_outer()
+    
     plt.show()
-Up_Drehzahl(Daten, Motor_Name)
-# def move_spines():
-#     fix, ax = plt.subplots()
-#     for spine in ["left", "bottom"]:
-#         ax.spines[spine].set_position("zero")
-    
-#     for spine in ["right", "top"]:
-#         ax.spines[spine].set_color("none")
-    
-#     return ax
+Diagramms(Daten, Motor_Name)
 
-# # M = f(Istrang)
-# # Die Input-variable ist Ke
 
-# Ke = Motor_Laenge/100 
-# def M_Grundzahl(data, motor_modell):
-#     Mg = data[motor_modell]
-#     am= (Mg.loc["Mquad"]*((1.4142*Mg.loc["N1_Innenspule"])/Vv)**2)*Ke
-#     bm = (Mg.loc["Mlin"]*((1.4142*Mg.loc["N1_Innenspule"])/Vv))*Ke
-#     cm = Mg.loc["Mabs"]*Ke
-#     M_g = am*(Strangstrom**2) + bm*(Strangstrom) + cm
-#     print("Drehmoment als Funktion der Durchflutung: {:.2f} [Nm]".format(M_g))
-#     print("\n")
-
-#     xmax = Strangstrom # Es wurde bereits so modifiziert, dass der Graph dieses Drehmoments als Maximalwert den Strangstrom jedes Motors hat.
-#     x = np.arange(0, xmax, 0.5)
-#     y = am * x ** 2 +bm * x + cm
-#     ax = move_spines()
-#     ax.set_title("M = f(I_Strang)")
-#     plt.xlabel("Phasenstrom / [A]")
-#     plt.ylabel("Drehmoment / [Nm]")
-#     plt.grid(True)
-#     ax.plot(x, y)
-
-#     # Plot a zero line
-#     ax.hlines(y=0, xmin=min(x), xmax=max(x), colors='r', linestyles='--', lw=1)
-
-#     # Show the plot
-#     plt.show()
-
-# def Up_Drehzahl(data, motor_modell):
-    
-#     x = np.arange(0, 413, 0.5)
-#     y = Spannungskonstante(Daten, Motor_Name)*2*np.pi*x
-    
-#     ax = move_spines()
-#     ax.set_title("Up = f(n)")
-#     plt.xlabel("Drehzahl [rpm]")
-#     plt.ylabel("ind.Spannung [V]")
-#     plt.grid(True)
-#     ax.plot(x, y)
-
-#     # Plot a zero line
-#     ax.hlines(y=0, xmin=min(x), xmax=max(x), colors='r', linestyles='--', lw=1)
-
-#     # Show the plot
-#     plt.show()
-
-# M_Grundzahl(Daten, Motor_Name)
-# Up_Drehzahl(Daten, Motor_Name)
     
 
     
-
-
 
