@@ -77,13 +77,14 @@ print("Delta Teta gesamt ist:",Delta_Teta_gesamt, "[K]\n")
 
 SpannungU1 = ""
 while True:
-    SpannungU1 = int(input("Bitte wählen Sie einen Spannungswert 400[V], 425[V] oder 200[V]: \n"))
+    SpannungU1 = float(input("Bitte wählen Sie einen Spannungswert 400[V], 425[V] oder 200[V]: \n"))
 
     if SpannungU1 == 400 or SpannungU1 == 425 or SpannungU1 ==200:
         print(f"Der gewählte Spannungswert ist: {SpannungU1} [V]")
         break
     else:
         print("Sie haben das falsch geschrieben, bitte versuchen es noch mal!")
+U1 = SpannungU1/1.732
 
 #Hier sucht das Programm die verfügbaren Optionen für die Variable Vv in Abhängigkeit vom Motor_Name
 print("\n")
@@ -110,7 +111,7 @@ def Frequenz1(data,motor_modell): # Hier muss die Frequenz berechnet werden
 
 def EisenVerluste(data,motor_modell):
     Pvfe = data[motor_modell]
-    return (Pvfe.loc['VH']*(1/Frequenz1(Daten, Motor_Name))+Pvfe.loc['VW']*(1/Frequenz1(Daten, Motor_Name))**Pvfe.loc['a'])*(Pvfe.loc['Bmax'])
+    return (Pvfe.loc['VH']*(1/Frequenz1(Daten, Motor_Name))+Pvfe.loc['VW']*(1/Frequenz1(Daten, Motor_Name))**Pvfe.loc['a'])*(Pvfe.loc['Bmax']**Pvfe.loc['b'])
 
 def EisenVerluste1(data,motor_modell):
     Pfe = data[motor_modell]
@@ -155,7 +156,7 @@ def Drehmomentkonstante(data, motor_modell):
 
 #---------------Basis-Berechnung der nmax---------------------------------------
 
-n_max = ((SpannungU1)/(Spannungskonstante(Daten, Motor_Name)*2*np.pi))*60
+n_max = ((U1)/(Spannungskonstante(Daten, Motor_Name)*2*np.pi))*60
 print("\n")
 print('nmax = {:.2f} [rpm]'.format(n_max))
 
@@ -164,6 +165,8 @@ print("\n")
 print("Drehzahl in [1/s] = {:.3f}".format(Drehzahl_1))
 print("\n")
 print("Frequenz f = {:.3f} [1/s]".format(Frequenz1(Daten,Motor_Name)))
+print("\n")
+print('Pvfe = {:.2f} [W/kg]'.format(EisenVerluste(Daten,Motor_Name)))
 print("\n")
 print('Pfe = {:.2f} [W]'.format(EisenVerluste1(Daten,Motor_Name)))
 print("\n")
@@ -189,40 +192,50 @@ print("\n")
 
 def Stromgrenze(data, motor_modell):
     Ld = data[motor_modell]
-    return ((mt.sqrt((SpannungU1**2)-(Up**2)))/(2*np.pi*Ld.loc['Ld'])*1000)
+    return ((np.sqrt((U1**2)-(Up**2)))/(2*np.pi*Frequenz1(Daten, Motor_Name)*Ld.loc['Ld'])*1000)
 
 print("Der Stromgrenze im Grunddrehzahlbereich I1g = {:.2f} [A]".format(Stromgrenze(Daten, Motor_Name)))
-
-
+print("\n")
 
 #---------------------Diagramme-----------------------------------------
 
 def Diagramms(data, motor_modell):
     Wert = data[motor_modell]
-    xmax = (n_max*(Wert.loc['STK_Magnet']/2))/60
-    x = np.arange(0, xmax, 2)
-    y1 = Spannungskonstante(Daten, Motor_Name)*2*np.pi*x 
-    y2 = (Wert.loc['VH']*(1/x)+Wert.loc['VW']*(1/x)**Wert.loc['a'])*(Wert.loc['Bmax'])
+    #U1 = SpannungU1/1.732
+    xmax = n_max/60 # Drehazhl wird in Sekunden umgerechnet
+    x = np.arange(0.1, xmax, 0.5)
 
-    fig, axis = plt.subplots(2, figsize=(10,10)) 
+    y1 = Spannungskonstante(Daten, Motor_Name)*2*np.pi*x 
+    y2 = ((np.sqrt((U1**2)-((Spannungskonstante(Daten,Motor_Name)*2*np.pi*x)**2)))/(2*np.pi*x*(Wert.loc['STK_Magnet']/2)*Wert.loc['Ld'])*1000)
+    #y2 = (np.sqrt((U1**2)-(Spannungskonstante(Daten,Motor_Name)*2*np.pi*x)**2))/2*np.pi*(x*15)*(Wert.loc['Ld']*(1/1000))
+
+    xmax1 = xmax*(Wert.loc['STK_Magnet']/2) # Frequenz wird von Drehzahl berechnet.
+    x1 = np.arange(0.1, xmax1, 2)
+
+    y3 = Wert.loc['kb']*Wert.loc['mb']*(Wert.loc['VH']*(1/x1)+((Wert.loc['VW']*(1/x1)**Wert.loc['a'])*Wert.loc['Bmax']**Wert.loc['b']))
+
+    
+
+    fig, axis = plt.subplots(3, figsize=(10,15)) 
     fig.suptitle("Diagramme")
+    
     axis[0].plot(x,y1)
-    axis[0].set_title("Up = f(n)")
-    #axis[0].set_xlabel("Frequenz [1/s]")
+    axis[0].legend(["Up = f(n)"])
+    axis[0].set_xlabel("Drehzahl [1/s]")
     axis[0].set_ylabel("ind.Spannung [V]")
     axis[0].grid()
     
-    axis[1].plot(x,y2, color="red")
-    axis[1].set_title("Pvfe = f(n)")
-    #axis[1].set_xlabel("Frequenz [1/s]")
-    axis[1].set_ylabel("Eisenverluste [W/kg]")
+    axis[1].plot(x,y2.astype(int), color="green")
+    axis[1].legend(["I1g = f(n)"])
+    axis[1].set_xlabel("Drehzahl [1/s]")
+    axis[1].set_ylabel("Strom [A]")
     axis[1].grid()
     
-    for ax in axis.flat:
-        ax.set(xlabel='Frequenz [1/s]')
-    
-    for ax in axis.flat:
-        ax.label_outer()
+    axis[2].plot(x1,y3, color="red")
+    axis[2].legend(["Pvfe = f(n)"])
+    axis[2].set_xlabel("Frequenz [1/s]")
+    axis[2].set_ylabel("Eisenverluste [W]")
+    axis[2].grid()
     
     plt.show()
 Diagramms(Daten, Motor_Name)
