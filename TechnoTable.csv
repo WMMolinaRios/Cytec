@@ -139,4 +139,4 @@ Spannungskonstante;;;;;;;;;;;;
 Anpassung Spannungskonstante;KorrekturFaktor;;1,05;1,05;1,05;1,05;1,05;1,05;1,05;1,05;1,05;1,05
 flächenbezogenen Flussscheitelwert;Flussscheiteltwert;mVs;1,2;1,14;1,48;;1,39;;1,11;;;1,84
 Basis Induktivität;;;;;;;;;;;;
-Induktivität für N = 1;Ld;mH;12,4;;;;;;;;;
+Induktivität für N = 1;Ld;mH;28,7;;;;;;;;;

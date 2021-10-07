@@ -112,7 +112,7 @@ def Frequenz1(data,motor_modell): # Hier muss die Frequenz berechnet werden
 
 def EisenVerluste(data,motor_modell):
     Pvfe = data[motor_modell]
-    return (Pvfe.loc['VH']*(1/Frequenz1(Daten, Motor_Name))+Pvfe.loc['VW']*(1/Frequenz1(Daten, Motor_Name))**Pvfe.loc['a'])*(Pvfe.loc['Bmax']**Pvfe.loc['b'])
+    return (Pvfe.loc['VH']*(Frequenz1(Daten, Motor_Name)/50)+Pvfe.loc['VW']*(Frequenz1(Daten, Motor_Name)/50)**Pvfe.loc['a'])*(Pvfe.loc['Bmax']**Pvfe.loc['b'])
 
 def EisenVerluste1(data,motor_modell):
     Pfe = data[motor_modell]
@@ -147,7 +147,7 @@ def Spannungskonstante(data, motor_modell):
     Ku = data[motor_modell]
     return (((Ku.loc['Flussscheiteltwert'])*2*0.93*Ku.loc['N1_Innenspule']*(Ku.loc['STK_Magnet']/2))*(Ku.loc['Nutflaeche_Anzahl']/(3*2*Vv))*((Ku.loc['KorrekturFaktor']/1.4142))/1000)
 
-# muss die Einheit der Frequenz ändert
+# muss die Einheit der Drehzahl in 1/s verwendet
 Up = (Spannungskonstante(Daten, Motor_Name)*2*np.pi*(Drehzahl_1))
 
 #---------------Basis-Berechnung des Drehmomentkonstante---------------------------------------
@@ -200,62 +200,120 @@ print("Der Stromgrenze im Grunddrehzahlbereich I1g = {:.2f} [A]".format(Stromgre
 print("\n")
 
 #---------------------Diagramme-----------------------------------------
-
 def Diagramm1(data, motor_modell):
     Wert = data[motor_modell]
     
     xmax = n_max/60 # Drehazhl wird in Sekunden umgerechnet
-    x = np.arange(0.1, xmax, 0.01)
-
+    x = np.arange(0.1, xmax, 0.01) # Drehzahlwerte
+            
     y1 = Spannungskonstante(Daten, Motor_Name)*2*np.pi*x 
-    y2 = ((np.sqrt((U1**2)-((Spannungskonstante(Daten,Motor_Name)*2*np.pi*x)**2)))/(2*np.pi*x*(Wert.loc['STK_Magnet']/2)*Wert.loc['Ld'])*1000)
-    #y2 = (np.sqrt((U1**2)-(Spannungskonstante(Daten,Motor_Name)*2*np.pi*x)**2))/2*np.pi*(x*15)*(Wert.loc['Ld']*(1/1000))
-
-    xmax1 = xmax*(Wert.loc['STK_Magnet']/2) # Frequenz wird von Drehzahl berechnet.
-    x1 = np.arange(0.1, xmax1, 0.5)
-
-    y3 = Wert.loc['kb']*Wert.loc['mb']*((Wert.loc['VH']*(1/x1)+Wert.loc['VW']*(1/x1)**Wert.loc['a'])*(Wert.loc['Bmax']**Wert.loc['b']))
-
-    Parameter_Summe = (Delta_Teta_gesamt**(Wert.loc["Rwk"]+Wert.loc["Rwb"]+Wert.loc["Rbk"]))
-    y4 = (Parameter_Summe - Wert.loc['Rbk'] * Wert.loc['kb']*Wert.loc['mb']*(Wert.loc['VH']*(1/x1)+((Wert.loc['VW']*(1/x1)**Wert.loc['a'])*Wert.loc['Bmax']**Wert.loc['b']))) / (Wert.loc["Rwk"]*(Wert.loc["Rwb"]+Wert.loc["Rbk"]))
-    
-    y5 = np.sqrt((Parameter_Summe - Wert.loc['Rbk'] * Wert.loc['kb']*Wert.loc['mb']*(Wert.loc['VH']*(1/x1)+((Wert.loc['VW']*(1/x1)**Wert.loc['a'])*Wert.loc['Bmax']**Wert.loc['b']))) / (Wert.loc["Rwk"]*(Wert.loc["Rwb"]+Wert.loc["Rbk"])) / (3*R1w))
-
-    fig, axis = plt.subplots(2, 2, figsize=(10,15)) 
-    fig.suptitle("Diagramme")
-    
-    axis[0, 0].plot(x,y1)
-    axis[0, 0].legend(title="F1 = Up(n)")
-    axis[0, 0].set_xlabel("Drehzahl [1/s]")
-    axis[0, 0].set_ylabel("ind.Spannung [V]")
-    axis[0, 0].grid()
-    
-    axis[0, 1].plot(x,y2.astype(float), color="green")
-    axis[0, 1].legend(["F2 = I1g(n)"])
-    axis[0, 1].set_xlabel("Drehzahl [1/s]")
-    axis[0, 1].set_ylabel("Strom [A]")
-    axis[0, 1].grid()
-    
-    axis[1, 0].plot(x1,y3, color="red")
-    axis[1, 0].legend(["F3 = Pvfe(f)"])
-    axis[1, 0].set_xlabel("Frequenz [1/s]")
-    axis[1, 0].set_ylabel("Eisenverluste [W]")
-    axis[1, 0].grid()
-    
-    axis[1, 1].plot(x1,y4, color="brown")
-    axis[1, 1].legend(["F4 = Pcu(f)"])
-    axis[1, 1].set_xlabel("Frequenz [1/s]")
-    axis[1, 1].set_ylabel("Kupferverlust [W]")
-    axis[1, 1].grid()
-    
     
     plt.figure(figsize=(9, 5), dpi=80)
-    plt.title("Phasenstrom")
-    plt.plot(x1,y5, color="red", label="I1(f)")
-    plt.legend(loc="lower right")
+    plt.title("Induzierte Spannung")
+    plt.plot(x, y1, color="blue", label="Up(n)")
+    plt.legend(loc="best")
+    plt.xlabel("Drehzahl [1/s]")
+    plt.ylabel("Spannung [V]")
+    plt.grid()
+    
+    xmax1 = xmax*(Wert.loc['STK_Magnet']/2) # Frequenz wird von Drehzahl berechnet.
+    x1 = np.arange(0.1, xmax1, 0.5) # Frequenzwerte
+    
+    y2 = Wert.loc['kb']*Wert.loc['mb']*(Wert.loc['VH']*(x1/50)+Wert.loc['VW']*(x1/50)**Wert.loc['a'])*Wert.loc['Bmax']**Wert.loc['b']
+    
+    plt.figure(figsize=(9, 5), dpi=80)
+    plt.title("Eisenverlust")
+    plt.plot(x1, y2, color="orange", label="Pvfe(f)")
+    plt.legend(loc="best")
+    plt.xlabel("Frequenz [1/s]")
+    plt.ylabel("Verlust [W]")
+    plt.grid()
+    
+    y3 = (Delta_Teta_gesamt*(Wert.loc["Rwk"]+Wert.loc["Rwb"]+Wert.loc["Rbk"])-Wert.loc["Rbk"]*(y2))/(Wert.loc["Rwk"]*(Wert.loc["Rwb"]+Wert.loc["Rbk"]))
+    
+    plt.figure(figsize=(9, 5), dpi=80)
+    plt.title("Kupferverlust")
+    plt.plot(x1, y3, color="orange", label="Pvcu(f)")
+    plt.legend(loc="best")
+    plt.xlabel("Frequenz [1/s]")
+    plt.ylabel("Verlust [W]")
+    plt.grid()
+    
+    y4 = ((np.sqrt((U1**2)-(Spannungskonstante(Daten, Motor_Name)*2*np.pi*x1**2)))/(2*np.pi*x1*Wert.loc['Ld'])*1000)
+    
+    plt.figure(figsize=(9, 5), dpi=80)
+    plt.title("Grenzstrom")
+    plt.plot(x1, y4, color="red", label="I1g(f)")
+    plt.legend(loc="best")
     plt.xlabel("Frequenz [1/s]")
     plt.ylabel("Strom [A]")
     plt.grid()
+    
+    y5 = np.sqrt(((Delta_Teta_gesamt*(Wert.loc["Rwk"]+Wert.loc["Rwb"]+Wert.loc["Rbk"])-Wert.loc["Rbk"]*(y2))/(Wert.loc["Rwk"]*(Wert.loc["Rwb"]+Wert.loc["Rbk"])))/(3*R1w))
+    
+    plt.figure(figsize=(9, 5), dpi=80)
+    plt.title("Phasenstrom")
+    plt.plot(x1, y5, color="red", label="I1(f)")
+    plt.legend(loc="best")
+    plt.xlabel("Frequenz [1/s]")
+    plt.ylabel("Strom [A]")
+    plt.grid()
+
+# def Diagramm1(data, motor_modell):
+#     Wert = data[motor_modell]
+    
+#     xmax = n_max/60 # Drehazhl wird in Sekunden umgerechnet
+#     x = np.arange(0.1, xmax, 0.01)
+
+#     y1 = Spannungskonstante(Daten, Motor_Name)*2*np.pi*x 
+#     y2 = ((np.sqrt((U1**2)-((Spannungskonstante(Daten,Motor_Name)*2*np.pi*x)**2)))/(2*np.pi*x*(Wert.loc['STK_Magnet']/2)*Wert.loc['Ld'])*1000)
+#     #y2 = (np.sqrt((U1**2)-(Spannungskonstante(Daten,Motor_Name)*2*np.pi*x)**2))/2*np.pi*(x*15)*(Wert.loc['Ld']*(1/1000))
+
+#     xmax1 = xmax*(Wert.loc['STK_Magnet']/2) # Frequenz wird von Drehzahl berechnet.
+#     x1 = np.arange(0.1, xmax1, 0.5)
+
+#     y3 = Wert.loc['kb']*Wert.loc['mb']*((Wert.loc['VH']*(1/x1)+Wert.loc['VW']*(1/x1)**Wert.loc['a'])*(Wert.loc['Bmax']**Wert.loc['b']))
+
+#     Parameter_Summe = (Delta_Teta_gesamt**(Wert.loc["Rwk"]+Wert.loc["Rwb"]+Wert.loc["Rbk"]))
+#     y4 = (Parameter_Summe - Wert.loc['Rbk'] * Wert.loc['kb']*Wert.loc['mb']*(Wert.loc['VH']*(1/x1)+((Wert.loc['VW']*(1/x1)**Wert.loc['a'])*Wert.loc['Bmax']**Wert.loc['b']))) / (Wert.loc["Rwk"]*(Wert.loc["Rwb"]+Wert.loc["Rbk"]))
+    
+#     y5 = np.sqrt((Parameter_Summe - Wert.loc['Rbk'] * Wert.loc['kb']*Wert.loc['mb']*(Wert.loc['VH']*(1/x1)+((Wert.loc['VW']*(1/x1)**Wert.loc['a'])*Wert.loc['Bmax']**Wert.loc['b']))) / (Wert.loc["Rwk"]*(Wert.loc["Rwb"]+Wert.loc["Rbk"])) / (3*R1w))
+
+#     fig, axis = plt.subplots(2, 2, figsize=(10,15)) 
+#     fig.suptitle("Diagramme")
+    
+#     axis[0, 0].plot(x,y1)
+#     axis[0, 0].legend(title="F1 = Up(n)")
+#     axis[0, 0].set_xlabel("Drehzahl [1/s]")
+#     axis[0, 0].set_ylabel("ind.Spannung [V]")
+#     axis[0, 0].grid()
+    
+#     axis[0, 1].plot(x,y2.astype(float), color="green")
+#     axis[0, 1].legend(["F2 = I1g(n)"])
+#     axis[0, 1].set_xlabel("Drehzahl [1/s]")
+#     axis[0, 1].set_ylabel("Strom [A]")
+#     axis[0, 1].grid()
+    
+#     axis[1, 0].plot(x1,y3, color="red")
+#     axis[1, 0].legend(["F3 = Pvfe(f)"])
+#     axis[1, 0].set_xlabel("Frequenz [1/s]")
+#     axis[1, 0].set_ylabel("Eisenverluste [W]")
+#     axis[1, 0].grid()
+    
+#     axis[1, 1].plot(x1,y4, color="brown")
+#     axis[1, 1].legend(["F4 = Pcu(f)"])
+#     axis[1, 1].set_xlabel("Frequenz [1/s]")
+#     axis[1, 1].set_ylabel("Kupferverlust [W]")
+#     axis[1, 1].grid()
+    
+    
+#     plt.figure(figsize=(9, 5), dpi=80)
+#     plt.title("Phasenstrom")
+#     plt.plot(x1,y5, color="red", label="I1(f)")
+#     plt.legend(loc="lower right")
+#     plt.xlabel("Frequenz [1/s]")
+#     plt.ylabel("Strom [A]")
+#     plt.grid()
     
     plt.show()
     
