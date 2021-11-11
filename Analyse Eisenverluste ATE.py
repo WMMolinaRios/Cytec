@@ -136,7 +136,7 @@ while True:
             ATE_Angabe_S1[7].append(Mag_Strom)
             ATE_Angabe_S1[8].append(Statorverluste)
             # print(ATE_Angabe_S1)
-
+            print("\n-----------------------------------------\n")
             Ohm_Verlust = 3 * Strom**2 * R_Strang120
             print("Pv_Ohm = ", "{:.2f}".format(Ohm_Verlust),"[W]")
             Fe_Verlust = Statorverluste - Ohm_Verlust
