@@ -77,13 +77,17 @@ print("Delta Teta gesamt ist:",Delta_Teta_gesamt, "[K]\n")
 
 SpannungU1 = ""
 while True:
-    SpannungU1 = float(input("Bitte wählen Sie einen Spannungswert 400[V], 425[V] oder 200[V]: \n"))
+    try:
+        SpannungU1 = float(input("Bitte wählen Sie einen Spannungswert 400[V], 425[V] oder 200[V]: \n"))
 
-    if SpannungU1 == 400 or SpannungU1 == 425 or SpannungU1 ==200:
-        print(f"Der gewählte Spannungswert ist: {SpannungU1} [V]")
-        break
-    else:
-        print("Sie haben das falsch geschrieben, bitte versuchen es noch mal!")
+        if SpannungU1 == 400 or SpannungU1 == 425 or SpannungU1 ==200:
+            print(f"Der gewählte Spannungswert ist: {SpannungU1} [V]")
+            break
+        else:
+            print("Sie haben das falsch geschrieben, bitte versuchen es noch mal!")
+    except:
+        print("Das war keine Zahl!!")
+
 U1 = SpannungU1/1.732
 
 #Hier sucht das Programm die verfügbaren Optionen für die Variable Vv in Abhängigkeit vom Motor_Name
@@ -93,15 +97,18 @@ vv_values = Daten[Motor_Name][vv_keys]
 vv_values = vv_values[vv_values!=''].astype(int)
 Vv = ""
 while True:
-    print("Die für diesen Motor verfügbaren Teilmotoren sind:\n", vv_values )
-    print("\n")
-    Vv = int(input("Wählen Sie den Teilmotor: "))
+    try:
+        print("Die für diesen Motor verfügbaren Teilmotoren sind:\n", vv_values )
+        print("\n")
+        Vv = int(input("Wählen Sie den Teilmotor: "))
+        print("\n")
     
-    if Vv not in vv_values.values:
-        print("Sie haben das falsch geschrieben, bitte versuchen es noch mal!\n")
-    else:
-        break
-print("\n")
+        if Vv not in vv_values.values:
+            print("Sie haben das falsch geschrieben, bitte versuchen es noch mal!\n")
+        else:
+            break
+    except:
+        print("Das war falsch!!")
 
 #------------------Basis-Berechnung mit Aussetzbetreib S3 & S6--------------------------------
 
