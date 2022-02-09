@@ -72,7 +72,7 @@ while True:
             ATE_Angabe_S1[6].append(Drehmoment)
             ATE_Angabe_S1[8].append(Statorverluste)
         # print(ATE_Angabe_S1)
-
+            
             Ohm_Verlust = 3 * Strom**2 * R_Strang120
             print("Pv_Ohm = ", "{:.2f}".format(Ohm_Verlust),"[W]")
             Fe_Verlust = Statorverluste - Ohm_Verlust
@@ -97,13 +97,13 @@ while True:
             PFGe = (1/Gesamt_Gewicht)*(0.00002*Drehzahl**2)+(0.1361*Drehzahl)-120
             print("Gesamte Eisenverlust = ","{:.2f}".format(PFGe),"[W/kg]")
 
-            fig = plt.figure(figsize=(8,6))
-            plt.quiver([0,0,0,0,1], [0,Up_Strang,(U_R1+Up_Strang),0,0], [0,0,-U_xd,-U_xd,0], [Up_Strang,U_R1,0,(U_R1+Up_Strang),Strom], angles='xy', scale_units='xy', scale=1, color=['black', 'purple', 'green', 'blue', 'red'])
-            plt.xlim(-200, 10)
-            plt.ylim(0, 200)
-            plt.title("Zeiger-Diagramm Grunddrehzahlbereich", fontsize=10)
-            plt.grid()
-            plt.show()
+            # fig = plt.figure(figsize=(8,6))
+            # plt.quiver([0,0,0,0,1], [0,Up_Strang,(U_R1+Up_Strang),0,0], [0,0,-U_xd,-U_xd,0], [Up_Strang,U_R1,0,(U_R1+Up_Strang),Strom], angles='xy', scale_units='xy', scale=1, color=['black', 'purple', 'green', 'blue', 'red'])
+            # plt.xlim(-200, 10)
+            # plt.ylim(0, 200)
+            # plt.title("Zeiger-Diagramm Grunddrehzahlbereich", fontsize=10)
+            # plt.grid()
+            # plt.show()
 
             break
 
@@ -135,6 +135,7 @@ while True:
             ATE_Angabe_S1[6].append(Drehmoment)
             ATE_Angabe_S1[7].append(Mag_Strom)
             ATE_Angabe_S1[8].append(Statorverluste)
+            
             # print(ATE_Angabe_S1)
             print("\n-----------------------------------------\n")
             Ohm_Verlust = 3 * Strom**2 * R_Strang120

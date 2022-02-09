@@ -8,7 +8,7 @@ Created on Tue May 11 11:08:18 2021
 import tkinter as tk
 from tkinter import ttk
 from pylab import*
-matplotlib.use("TkAgg")
+#matplotlib.use("TkAgg")
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg, NavigationToolbar2Tk
 import matplotlib.pyplot as plt
 from matplotlib.figure import Figure
