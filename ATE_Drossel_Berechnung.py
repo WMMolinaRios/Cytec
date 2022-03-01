@@ -111,21 +111,24 @@ while Drehmoment is not float:
 
 #----------------------Berechnung S1-Betrieb-----------------------------------------
 
+U1 = FU_Spannung / mt.sqrt(3)
 Ind_Gesamt = Ind + Ind_Vordr
 R_Strang120 = R_Strang * 1.4
-ke_Strang = ke / 1.732
+ke_Strang = ke / mt.sqrt(3)
 Ohm_Verlust = 3 * Strom**2 * R_Strang120
-Xh = (2*mt.pi*(Frequenz)*(Ind_Gesamt/1000))
+Xd = (2*mt.pi*(Frequenz)*(Ind_Gesamt/1000))
 #Fe_Verlust = Statorverluste - Ohm_Verlust
 Up_Strang = (ke_Strang*Drehzahl)/1000
 U_R1 = Strom * R_Strang120
-U_xd = Xh * Strom #Mit Vorschaltdrossel
+U_xd = mt.sqrt((U1**2)-(Up_Strang+U_R1)**2)
 Kontrolle_FU_Sp = mt.sqrt((Up_Strang + U_R1)**2 + (U_xd)**2)*mt.sqrt(3)
-Kontrol_I1 = Up_Strang/Xh
+Kontrol_I1 = Leistung*1000/(3*Up_Strang)
+Kontrol2_I1 = U_xd / Xd
 
 print("\n-----------------------------------------------------------------\n")
 
 print("****Im Grunddrehzahlbereich Iq = I1****\n")
+print("Kontrol_I1 (Von Pn)= ","{:.2f}".format(Kontrol_I1),"[A]\n")
 print("Pv_Ohm = ", "{:.2f}".format(Ohm_Verlust),"[W]\n")
 #print("Pfe = ", "{:.2f}".format(Fe_Verlust),"[W]")
 print("Up_Strang = ", "{:.2f}".format(Up_Strang),"[V]\n")
@@ -133,8 +136,7 @@ print("U_R1 = ", "{:.2f}".format(U_R1),"[V]\n")
 print("U_xd = ", "{:.2f}".format(U_xd),"[V]\n")
 print("Kontrol_FU_Sp= ", "{:.2f}".format(Kontrolle_FU_Sp),"[V]\n")
 #print("Gesamte Eisenverlust = ","{:.2f}".format(PFGe),"[W/kg]")
-print("Kontrol_I1= ","{:.2f}".format(Kontrol_I1),"[A]\n")
-print("Hauptreaktanz Xh= ", "{:.2f}".format(Xh),"[Ω]")
+print("Hauptreaktanz Xd= ", "{:.2f}".format(Xd),"[Ω]")
 
 print("\n----------------Hier können Sie einen neuen Wert für die Drossel geben:--------------------\n")
 
@@ -146,20 +148,24 @@ while True:
         NewL = ""
         while NewL is not float:
             try:
-                NewL = float(locale.atof(input("Neuer Wert von L [mH] = ")))
+                NewL = float(locale.atof(input("Neuer Wert für L [mH] = ")))
+                NewU1 = float(locale.atof(input("Neuer Wert für U1 [V] = ")))
                 break 
             except ValueError:
                 print("Sie haben das falsch geschrieben, bitte versuchen es noch mal!\n")
         
+        NewU1 = NewU1 / mt.sqrt(3)
         Ind_Total = Ind + NewL
-        Xh = (2*mt.pi*(Frequenz)*(Ind_Total/1000))
-        Kontrol_I1 = Up_Strang/Xh
-        U_xd = Xh * Strom 
+        Xd = (2*mt.pi*(Frequenz)*(Ind_Total/1000))
+        U_xd = mt.sqrt((NewU1**2)-(Up_Strang+U_R1)**2)
+        Kontrol_I1 = U_xd / Xd
         
+        print("\n")
         print("Die gesamte ankerinduktivität ist:", "{:.2f}".format(Ind_Total),"[mH]\n")
-        print("Hauptreaktanz Xh= ", "{:.2f}".format(Xh),"[Ω]\n")
-        print("Kontrol_I1= ","{:.2f}".format(Kontrol_I1),"[A]\n")
+        print("Hauptreaktanz Xd= ", "{:.2f}".format(Xd),"[Ω]\n")
         print("U_xd = ", "{:.2f}".format(U_xd),"[V]\n")
+        print("Kontrol_I1= ","{:.2f}".format(Kontrol_I1),"[A]\n")
+        
         
     else:
         print("Sie haben das falsch geschrieben, bitte versuchen es noch mal!")
