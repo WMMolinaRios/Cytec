@@ -1,0 +1,12 @@
+{
+  "base_url": "/",
+  "hostname": "localhost",
+  "password": false,
+  "pid": 272,
+  "port": 8888,
+  "root_dir": "C:\\Users\\wmolina",
+  "secure": false,
+  "token": "c1217d22b89fb137142cfcc5ace4903b981f5c29743bf614",
+  "url": "http://localhost:8888/",
+  "version": "1.4.1"
+}
