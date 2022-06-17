@@ -10,22 +10,22 @@ Nutfläche;F1;mm²;204,32;194,58;312,98;301,62;344,51;349,98;294,83;357,78;275,6
 Anzahl Nutflächen;Nutflaeche_Anzahl;stk.;36;36;36;36;48;48;60;72;72;72
 Zahnbreite;B1;mm;7,2;7,2;8,4;8,2;8,4;7,3;7,2;7,2;8,4;11,3
 Blech Querschnittsfläche;F2;mm²;8753,21;8236,6;13613,28;10665,37;21814,14;14910,55;18350,29;29565,77;25280,45;44286,881
-Elektroblechsorte;;;;;;;;;;;;
-Blechstärke;???;mm;0,5;0,5;0,5;0,5;0,5;0,5;0,5;0,5;0,5;0,5
+Elektroblechsorte;Thyssenkrupp;EN 10106;;;;;;;;;;
+Blechstärke;Blechstärke;mm;0,5;0,5;0,5;0,5;0,5;0,5;0,5;0,5;0,5;0,5
 Ummagnetisierungsverluste bei 50Hz-1,5T;Pv(ummag 1,5T);W/kg;2,7;2,7;2,7;2,7;2,7;2,7;2,7;2,7;2,7;2,7
 Ummagnetisierungsverluste;Pv(ummag 1T);W/kg;1,1;1,1;1,1;1,1;1,1;1,1;1,1;1,1;1,1;1,1
-Min. Polarisation;2.500 (A/m);T;1,49;1,49;1,49;1,49;1,49;1,49;1,49;1,49;1,49;1,49
-Min. Polarisation;5.000 (A/m);T;1,6;1,6;1,6;1,6;1,6;1,6;1,6;1,6;1,6;1,6
-Min. Polarisation;10.000 (A/m);T;1,7;1,7;1,7;1,7;1,7;1,7;1,7;1,7;1,7;1,7
+Min. Polarisation;mP_2.500(A/m) ;T;1,49;1,49;1,49;1,49;1,49;1,49;1,49;1,49;1,49;1,49
+Min. Polarisation;mP_5.000(A/m);T;1,6;1,6;1,6;1,6;1,6;1,6;1,6;1,6;1,6;1,6
+Min. Polarisation;mP_10.000 (A/m);T;1,7;1,7;1,7;1,7;1,7;1,7;1,7;1,7;1,7;1,7
 Dichte (Thyssenkrupp);rho_Blech;kg/dm³;7,6;7,6;7,6;7,6;7,6;7,6;7,6;7,6;7,6;7,6
 (Si+Al) Gehalt;Wälzholz;%;3,32;3,32;3,32;3,32;3,32;3,32;3,32;3,32;3,32;3,32
 Wärmeleitfähigkeit λ ;Lambda_Blech;W/(m*K);22;22;22;22;22;22;22;22;22;22
-Blechpakethöhe;B_l100;mm;100;100;100;100;100;100;100;100;100;100
+Blechpakethöhe;B_h100;mm;100;100;100;100;100;100;100;100;100;100
 Volumen bei 100 mm Bauhöhe Eisen (ohne Isolation);Vol_Eisen100;dm³;0,858;0,807;1,334;1,045;2,138;1,461;1,798;2,897;2,477;4,34
 Gewicht bei 100 mm Bauhöhe Eisen (ohne Isolation);m_Eisen100;kg;6,52;6,13;10,14;7,94;16,25;11,11;13,67;22,02;18,83;32,98
 spezifische Wärmekapazität Stahl;c_Blech;J/(kg*K);450;450;450;450;450;450;450;450;450;450
-Blechisolation;;;;;;;;;;;;
-Isolationsschichtdicke pro Seite;l_isoschichtdicke;µm;5;5;5;5;5;5;5;5;5;5
+Blechisolation;Rembrandtin EB 549;Bez. Thys.;;;;;;;;;;
+Isolationsschichtdicke pro Seite;lso_schichtdicke;µm;5;5;5;5;5;5;5;5;5;5
 Wärmeleitfähigkeit λ ;Lambda_Blechiso;W/(m*K);0,2;0,2;0,2;0,2;0,2;0,2;0,2;0,2;0,2;0,2
 Dichte ;rho_Blechiso;kg/dm³;1,08;1,08;1,08;1,08;1,08;1,08;1,08;1,08;1,08;1,08
 Volumen bei 100 mm Bauhöhe;Vol_Blech100;dm³;0,018;0,016;0,027;0,021;0,044;0,03;0,037;0,059;0,051;0,089
@@ -48,8 +48,8 @@ Magnet Querschnittsfläche;A_Magnet;mm²;63,79;53,63;99,79;;99,79;;67,69;113,79;
 Volumen bei 100 mm Bauhöhe;Vol_Magnet100;dm³;0,191;0,225;0,299;;0,399;;0,474;0,683;;0,899
 Gewicht bei 100 mm Bauhöhe;m_Magnet100;kg;1,426;1,678;2,23;;2,974;;3,53;5,086;;6,695
 Drehmoment;;;;;;;;;;;;
-Mfunktion- Absolutwert;Mabs;Nm;10,14;-1,45;-17,11;;-0,027;;27,1;;;-37,71
-Mfunktion- Linearanteil;Mlin;Nm;0,31;0,43;0,4282;;0,708;;1,145;;;2,09
+Mfunktion- Absolutwert;Mabs;Nm;10,14;-1,45;-17,11;;-0,027;;27,1;;;-14,644
+Mfunktion- Linearanteil;Mlin;Nm;0,31;0,43;0,4282;;0,708;;1,145;;;1,8935
 Mfunktion- Quad.Anteil;Mquad;Nm;-0,00003;-0,00005;-0,00004;;-0,00007;;-0,0001;;;-0,0002
 Rastmomentscheitelwert;Mrast;Nm;6;1,5;8;;15;;6;;;
 Windungsdaten;;;;;;;;;;;;
@@ -80,7 +80,7 @@ cu gewicht ges.;m_cu;g;4084,85;3435,45;6640,85;;9195,62;;9710,39;13621,8;;16045,
 cu gewicht pro spule ;m_Spule;g/Stck.;113,47;95,43;184,47;;191,58;;161,84;189,19;;222,85
 Drahtlänge pro Spule;l_Spule;m;9,32;21,35;15,16;;15,74;;13,3;15,55;;18,31
 Widerstand pro Spule;R_pro_Spule;Ω;0,117458;0,732384;0,190955;;0,198312;;0,167531;0,195844;;0,230684
-Widerstand pro Spule Lt. Spulenhersteller gemessen;;Ω;0,126;;0,21;;;;0,182;0,216;;0,24
+Widerstand pro Spule Lt. Spulenhersteller gemessen;R_pro_Spule(Hersteller);Ω;0,126;;0,21;;;;0,182;0,216;;0,24
 Strangwiderstand Seriell verschaltet;R_Strang;Ω;2,818993;17,577209;4,582913;;6,345982;;6,70123;9,400528;;11,072842
 Vergussmasse ;;;;;;;;;;;;
 Epoxid Wickelkopf;CW2243-2L;100 GT;614,6;403;892;;1317;;1036;0;;0
@@ -94,9 +94,9 @@ Wärmeleitfähigkeit λ (18°C) (DIN 52612);Lambda_Verguss;W/(m*K);0,8;0,8;0,8;;
 spezifische Wärmekapazität;c_Verguss;J/(g*K);1;1;1;;1;;1;1;;1
 Dichte 25°C;rho_Verguss;kg/dm³;1,58;1,58;1,58;;1,58;;1,58;1,58;;1,58
 Durchschlagsfestigkeit IEC 243 Elektrisch (23°C);Ed;kV/mm;15;15;15;;15;;15;15;;15
-Isolierstoffklasse ;B;°C;130;130;130;;130;;130;130;;130
+Isolierstoffklasse ;TempIso_klass;°C;130;130;130;;130;;130;130;;130
 Kühlmittel Gemisch 30 Vol.-%;;;;;;;;;;;;
-Kontaktfläche ;Wall to Fluid;dm²;;;;;;;;;;
+Kontaktfläche ;;dm²;;;;;;;;;;
 Min. Querschnitt Kühlwendel;;mm²;;;;;;;;;;
 Wasser/Tyfocor ;;;;;;;;;;;;
 Dichte Gemisch 30%;rho_K20;kg/m³;1044;1044;1044;;1044;;1044;1044;;1044
@@ -107,6 +107,11 @@ Wärmeleitfähigkeit 30%;Lambda_K20;W/(m*K);0,467;0,467;0,467;;0,467;;0,467;0,46
 Wärmeleitfähigkeit 30%;Lambda_K30;W/(m*K);0,478;0,478;0,478;;0,478;;0,478;0,478;;0,478
 Kinematische Viskosität;v_K20;mm²/s;2,34;2,34;2,34;;2,34;;2,34;2,34;;2,34
 Kinematische Viskosität;v_K30;mm²/s;1,77;1,77;1,77;;1,77;;1,77;1,77;;1,77
+Basis Induktivität Spulenpaar;;;;;;;;;;;;
+Induktivität ungesättigt für N = 1;L_ug;H;;;;;;;;;;0,000001595
+"Grenzstrom ungesättigt; Scheitelwert";Igr_ug;A;;;;;;;;;;1500
+Induktivität gesättigt für N = 1;L_g;H;;;;;;;;;;0,00000112
+"Grenzstrom gesättigt; Scheitelwert";Igr_g;A;;;;;;;;;;3000
 Modell Eisenverluste;;;;;;;;;;;;
 mag. Flussdichte in T             Vorläufig;Bmax;T;1,7;1,7;1,7;1,7;1,7;1,7;1,7;1,7;1,7;1,6
 Koeff. Hysterese in W/kg;VH;W/kg;0,578;0,578;0,578;0,578;0,578;0,578;0,578;0,578;0,578;0,578
@@ -136,7 +141,14 @@ Verschaltungsvarianten;;;;;;;;;;;;
 ;10TM;;;;;;;;10;;;
 ;12TM;;;;;;;;;12;;12
 Spannungskonstante;;;;;;;;;;;;
-Anpassung Spannungskonstante;KorrekturFaktor;;1,05;1,05;1,05;1,05;1,05;1,05;1,05;1,05;1,05;1,05
-flächenbezogenen Flussscheitelwert;Flussscheiteltwert;mVs;1,2;1,14;1,48;;1,39;;1,11;;;1,84
-Basis Induktivität;;;;;;;;;;;;
-Induktivität für N = 1;Ld;mH;28,7;;;;;;;;;
+Anpassung Spannungskonstante;KorrekturFaktor;;1;;1;;;;;;;1
+flächenbezogene Flussscheitelwert;Flussscheiteltwert;mVs;1,2;1,14;1,48;;1,39;;1,11;;;1,84
+Seriel;;;;;;;;;;;;
+2TM;;;;;;;;;;;;
+3TM;;;;;;;;;;;;
+4TM;;;;;;;;;;;;
+5TM;;;;;;;;;;;;
+6TM;;;;;;;;;;;;
+8TM;;;;;;;;;;;;
+10TM;;;;;;;;;;;;
+12TM;;;;;;;;;;;;

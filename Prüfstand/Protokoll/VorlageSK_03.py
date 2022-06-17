@@ -1,8 +1,11 @@
-import os
-import shutil
-import pandas as pd
+#import shutil
 #import openpyxl as xl
-#import copy 
+#import copy
+#import locale
+#locale.setlocale(locale.LC_ALL, 'de_DE.utf8') # geht nicht mit enterbox/multenterbox
+
+import os
+import pandas as pd
 from datetime import date 
 from docxtpl import DocxTemplate, InlineImage
 from docx.shared import Mm
@@ -10,42 +13,29 @@ from docx.shared import Mm
 import easygui as eg
 import sys
 
-import locale
-#locale.setlocale(locale.LC_ALL, 'de_DE.utf8') # geht nicht mit enterbox/multenterbox
+import matplotlib.pyplot as plt
+import matplotlib.ticker as plticker
+
+
 
 ################# Benutzereinstellungen #################
-
-#OUTPUT_PATH = eg.diropenbox(msg = "Bitte den Ausgabepfad angeben")
-#OUTPUT_PATH = "C:/Users/wmolina/Desktop/Python/Prüfstand/Protokoll/Outputs"
 
 Excel_Path = eg.fileopenbox(msg = "Bitte die Messwerte-Datei auswählen", default = "*.xlsx")
 if Excel_Path == None:
     sys.exit()
-#Excel_Path = 'C:/Users/wmolina/Desktop/Python/Prüfstand/Protokoll/Inputs/Belastungsmessung Prüfprotokoll.xlsx'
 
 Word_Path = eg.fileopenbox(msg = "Bitte die Protokoll-Vorlage auswählen", default = "*.docx")
 if Word_Path == None:
     sys.exit()
-#Word_Path = 'C:/Users/wmolina/Desktop/Python/Prüfstand/Protokoll/Inputs/Templates/Wordtemplate.docx'
 
-IMAGE_PATH = eg.fileopenbox(msg = "Bitte das Diagramm auswählen", default = "*.jpg")
+IMAGE_PATH = eg.fileopenbox(msg = "Bitte das Diagramm auswählen", default = "*.png", filetypes = ["*.bmp", "*.jpg", "*.png"])
 if IMAGE_PATH == None:
     sys.exit()
-#IMAGE_PATH = "C:/Users/wmolina/Desktop/Python/Prüfstand/Protokoll/Inputs/Diagramms/Test.jpg"
 
 # Farbebereich: In google = rgb to hex
 # HochTemp_Farbe = 'eb4634'
 # NiedigTemp_Farbe = '49eb34'
 
-
-# Löschung und Neuanlage des Ausgabeordners.
-# def DeleteCreateFolder(path):
-#     # Check if the folder exists and delete it
-#     if (os.path.exists(path)):
-#         shutil.rmtree(path)
-
-#     # Create a new folder:
-#     os.mkdir(OUTPUT_PATH) 
 
 # Read Exceldata:
 def ReadData(path, WorkSheet):
@@ -63,10 +53,10 @@ def Fehler(df_Data):
                 print("Error", Temperatur, "Fehlerwert:" + str(row[temp]))
                 print("\n")
 
-def save_file_dialogs(extension = "docx"):
-    saveornot = eg.buttonbox(msg="Soll die Datei gespeichert werden?", choices = ("No", "Yes") )
+def save_file_dialogs(default_filename, extension = "docx"):
+    saveornot = eg.buttonbox(msg="Soll die Datei gespeichert werden?",choices = ("No", "Yes") )
     if saveornot == "Yes":
-        filename = eg.filesavebox(msg = "Dateiname eingeben (die Erweiterung %s wird automatisch angehängt)?" %(extension))
+        filename = eg.filesavebox(msg = "Dateiname eingeben (die Erweiterung %s wird automatisch angehängt)?" %(extension), default = default_filename)
         if filename is None:
             return None
         filename = filename + "." + extension
@@ -84,38 +74,7 @@ def save_file_dialogs(extension = "docx"):
 
 # Erzeugung Worddateien
 def CreateWord(df_Data):
-    # KNr = ""
-    # while KNr is not float:
-    #     try:
-    #         KNr = int(input("Geben Sie die Kommissionsnummer ein: "))
-    #         break 
-    #     except ValueError:
-    #         print("Sie haben das falsch geschrieben, bitte versuchen es noch mal!\n")
-
-    # print("\n")
-    # Leistung = ""
-    # while Leistung is not float:
-    #     try:
-    #         Leistung = int(input("Geben Sie die Leistung in [kW] ein: "))
-    #         break 
-    #     except ValueError:
-    #         print("Sie haben das falsch geschrieben, bitte versuchen es noch mal!\n")
-    
-    # print("\n")
-    # MotorTyp = input("Geben Sie das Motortyp: ")
-    
-    # print("\n")
-    # Hersteller = input("Geben Sie den Hersteller ein: ")
-
-    # print("\n")
-    # Datenbaltt = ""
-    # while Datenbaltt is not float:
-    #     try:
-    #         Datenbaltt = str(input("Geben Sie das Datenblatt ein: "))
-    #         break 
-    #     except ValueError:
-    #         print("Sie haben das falsch geschrieben, bitte versuchen es noch mal!\n")
-
+    #Eingabe von allgemeinen Spindeldaten
     msg = "Geben sie Verwaltungsinformationen ein."
     title = "Allgemeine Angaben"
     fieldNames = ["Kundenname","Kommissionsnummer","Spindelbezeichnung","AS-Nr.","Motorbez.","DBL.Nr.","Nennleistung","Nenndrehzahl","max.Drehzahl","Prüfer/in"]
@@ -136,7 +95,7 @@ def CreateWord(df_Data):
     genDat = dict(zip(fieldNames, fieldValues))
     #print('Spindelbezeichnung = ' + genDat['Spindelbezeichnung'])
     
-    spinType = eg.choicebox(msg='Pick an item', title='', choices=['Synchron', 'Asynchron'], preselect=0) #, callback=None, run=True
+    spinType = eg.choicebox(msg='Pick an item', title='', choices=['Synchron', 'Asynchron'], preselect=0)
     #print(spinType)
 
 
@@ -158,14 +117,6 @@ def CreateWord(df_Data):
         img = InlineImage(docx_tpl, imag_path, height = Mm(95))
 
         context = {
-            # 'date' : date.today(),
-            # 'K_Nr' : KNr,
-            # 'SpindelP' : Leistung,
-            # 'Motortyp' : MotorTyp,
-            # 'Hersteller' : Hersteller,
-            # 'DB' : Datenbaltt,
-            # 'zeit_list' : ZeitList,
-            # 'bild' : img,
             'K_name' : genDat['Kundenname'],
             'K_Nr' : genDat['Kommissionsnummer'],
             'WZ' : genDat['Spindelbezeichnung'],
@@ -183,22 +134,17 @@ def CreateWord(df_Data):
         }
 
         docx_tpl.render(context)
-
-        # Save File
-        #name_file = 'Messung_Vorlage' +'.docx'
-        #docx_tpl.save(OUTPUT_PATH + '\\' + name_file)
-    saveyesno = save_file_dialogs()
+        
+        default_filename = (genDat['Kommissionsnummer'] + "_" + genDat['Motorbez.'])
+    # Save File
+    saveyesno = save_file_dialogs(default_filename)
     if saveyesno != None:
         docx_tpl.save(saveyesno)
-        #eg.msgbox(msg = "Protokolldatei wurde unter %s gespeichert." %(saveyesno) )
         if eg.buttonbox(msg = "Protokolldatei wurde unter %s gespeichert.\n\n Soll die Datei geöffnet werden?" %(saveyesno),choices=('Ja', 'Nein')) == 'Ja':
             os.startfile(saveyesno)
 
 # Ruting principal
 def main():
-    # Delete and recreate the folder OUTPUTS
-    #DeleteCreateFolder(OUTPUT_PATH) 
-
     # Read the Excel Data
     df_messung = ReadData(Excel_Path, 'man. aufgezeichnete Messwerte')
 
@@ -211,5 +157,4 @@ def main():
 
 if __name__ == '__main__':
     main()
-                    
 

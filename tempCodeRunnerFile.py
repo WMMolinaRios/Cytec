@@ -1,3 +1,1 @@
-break
-    except:
-        print("Das war falsch!!")
+loc="best"
